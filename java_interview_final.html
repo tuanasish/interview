@@ -747,7 +747,7 @@ function renderList() {
         let exampleHtml = q.example ? `
             <div class="ans-section">
                 <div class="ans-title example">💻 Code Ví Dụ Hiện Thực</div>
-                <pre><code>${q.example.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>
+                <pre><code>${q.example.replace(/(?:\\n|\n)/g, '\n').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>
             </div>` : '';
 
         return `
@@ -761,13 +761,13 @@ function renderList() {
             <div class="q-body">
                 <div class="ans-section">
                     <div class="ans-title core">📝 Trả lời Trọng Tâm</div>
-                    <div>${q.a.replace(/\\n/g, '<br><br>')}</div>
+                    <div>${q.a.replace(/(?:\\n|\n)/g, '<br><br>')}</div>
                 </div>
 
                 ${q.explain ? `
                 <div class="ans-section">
                     <div class="ans-title explain">📖 Phân Tích Sâu</div>
-                    <div>${q.explain.replace(/\\n/g, '<br>')}</div>
+                    <div>${q.explain.replace(/(?:\\n|\n)/g, '<br>')}</div>
                 </div>` : ''}
 
                 ${exampleHtml}
@@ -803,4 +803,5 @@ renderList();
 
 </body>
 </html>
+
 
