@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài Liệu Ôn Tập: Intern Java Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f3f4f6;
+            --surface-color: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --border-color: #e5e7eb;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+            --accent: #10b981;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            animation: fadeIn 1s ease;
+        }
+
+        .tab-btn {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: var(--transition);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Content Sections */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Accordion (Questions & Answers) */
+        .accordion-item {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        .accordion-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .accordion-header {
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            background: var(--surface-color);
+            transition: var(--transition);
+        }
+
+        .accordion-header.active {
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+            color: var(--text-muted);
+        }
+
+        .accordion-header.active .icon {
+            transform: rotate(45deg);
+            color: var(--primary-color);
+        }
+
+        .accordion-body {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            background: #fafafa;
+        }
+
+        .accordion-body.active {
+            padding: 1.5rem;
+            max-height: 2000px; /* arbitrary large value for transition */
+        }
+
+        .answer-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .answer-label {
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tables formatting */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: white;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--bg-color);
+            font-weight: 600;
+        }
+
+        /* Content Text */
+        .content-text {
+            color: var(--text-muted);
+            white-space: pre-line;
+        }
+
+        .content-text ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .content-text li {
+            margin-bottom: 0.25rem;
+        }
+
+        /* Code Blocks */
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-top: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        .example-box {
+            background: rgba(37, 99, 235, 0.05);
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-top: 1rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            h1 { font-size: 2rem; }
+            .accordion-header { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Tài Liệu Ôn Tập Phỏng Vấn</h1>
+        <p>Vị trí: Intern Java Developer</p>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('java-core')">☕ Java Core & OOP</button>
+        <button class="tab-btn" onclick="switchTab('sdlc')">🔄 SDLC & Mô hình phát triển</button>
+        <button class="tab-btn" onclick="switchTab('dsa')">🧩 Cấu trúc dữ liệu & Giải thuật</button>
+    </div>
+
+    <!-- TAB 1: JAVA CORE & OOP -->
+    <div id="java-core" class="tab-content active">
+        
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                1. So sánh Interface và Abstract Class
+                <span class="icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="answer-section">
+                    <div class="answer-label">Câu trả lời</div>
+                    <div class="content-text">
+<ul>
+    <li><b>Interface:</b> Dùng khi các đối tượng hoàn toàn khác nhau nhưng có hành vi hoặc liên kết chung. Một class có thể implements nhiều interface. Các method mặc định là public abstract (trước Java 8).</li>
+    <li><b>Abstract Class:</b> Dùng khi các lớp có quan hệ cha-con mạnh, muốn dùng chung (chia sẻ) thuộc tính, phương thức, code chung. Có thể chứa method có body, field, constructor. Một class con chỉ extends được 1 abstract class.</li>
+</ul>
+                    </div>
+                </div>
+                <div class="answer-section">
+                    <div class="answer-label">Ví dụ</div>
+                    <div class="example-box content-text">
+<b>Interface:</b> Các phương thức thanh toán khác nhau nhưng dùng chung hành vi <code>payment()</code>.
+<pre>
+public interface PaymentGateway {
+    void payment();
+}
+public class MBBank implements PaymentGateway {
+    public void payment() { /* Xử lý thanh toán MBBank */ }
+}
+public class BIDV implements PaymentGateway {
+    public void payment() { /* Xử lý thanh toán BIDV */ }
+}
+</pre>
+<b>Abstract Class:</b> Động vật có chung thuộc tính tên, nhưng tiếng kêu khác nhau.
+<pre>
+public abstract class Animal {
+    String name;
+    public Animal(String name) { this.name = name; }
+    public abstract void makeSound();
+}
+</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                2. Liệt kê các kiểu dữ liệu trong Java
+                <span class="icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="answer-section">
+                    <div class="answer-label">Câu trả lời</div>
+                    <div class="content-text">
+Trong Java, các loại dữ liệu được chia thành hai nhóm chính:
+<b>1. Kiểu dữ liệu nguyên thủy (Primitive Data Type)</b>
+Lưu trữ giá trị trực tiếp trên Stack, gồm 8 loại:
+<table>
+    <tr><th>Loại</th><th>Kích thước</th><th>Giá trị mặc định</th><th>Giải khoảng</th></tr>
+    <tr><td>byte</td><td>1 byte</td><td>0</td><td>-128 đến 127</td></tr>
+    <tr><td>short</td><td>2 byte</td><td>0</td><td>-32,768 đến 32,767</td></tr>
+    <tr><td>int</td><td>4 byte</td><td>0</td><td>-2^31 đến 2^31 - 1</td></tr>
+    <tr><td>long</td><td>8 byte</td><td>0L</td><td>-2^63 đến 2^63 - 1</td></tr>
+    <tr><td>float</td><td>4 byte</td><td>0.0f</td><td>Số thực độ chính xác đơn</td></tr>
+    <tr><td>double</td><td>8 byte</td><td>0.0d</td><td>Số thực độ chính xác kép</td></tr>
+    <tr><td>char</td><td>2 byte</td><td>'\u0000'</td><td>Ký tự Unicode</td></tr>
+    <tr><td>boolean</td><td>1 bit</td><td>false</td><td>true / false</td></tr>
+</table>
+<br>
+<b>2. Kiểu dữ liệu tham chiếu (Reference Data Type)</b>
+Lưu trữ địa chỉ của đối tượng trong bộ nhớ Heap.
+<ul>
+    <li><b>String:</b> Chuỗi ký tự</li>
+    <li><b>Array:</b> Mảng các phần tử cùng kiểu</li>
+    <li><b>Class/List/Map:</b> Định nghĩa các đối tượng (Collections)</li>
+    <li><b>Interface:</b> Định nghĩa hành vi</li>
+    <li><b>Enum:</b> Kiểu liệt kê nhóm hằng số</li>
+</ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                3. Các loại biến trong Java là gì?
+                <span class="icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="answer-section">
+                    <div class="answer-label">Câu trả lời</div>
+                    <div class="content-text">
+Trong Java có 4 loại biến chính:
+<ul>
+    <li><b>Biến cục bộ (Local variable):</b> Khai báo trong phương thức, constructor hoặc khối mã và chỉ dùng được trong phạm vi đó.</li>
+    <li><b>Biến thành viên/thực thể (Instance variable):</b> Thuộc về đối tượng cụ thể (khai báo ngoài method nhưng không có static).</li>
+    <li><b>Biến tĩnh (Static variable):</b> Thuộc về class, được dùng chung cho tất cả các đối tượng sinh ra từ class.</li>
+    <li><b>Biến hằng (Constant variable):</b> Khai báo với từ khóa <code>final</code>, giá trị không thể thay đổi sau khi khởi tạo.</li>
+</ul>
+                    </div>
+                </div>
+                <div class="answer-section">
+                    <div class="answer-label">Ví dụ</div>
+                    <div class="example-box">
+<pre>
+public class Demo {
+    // Biến static (dùng chung)
+    static String company = "MyCompany";
+    
+    // Biến instance (thuộc về đối tượng)
+    String name; 
+    
+    // Biến hằng
+    final double PI = 3.14159; 
+
+    public void show() {
+        // Biến cục bộ (Local)
+        int age = 20; 
+        System.out.println("Tuổi: " + age);
+    }
+}
+</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                4. Phân biệt Overloading và Overriding
+                <span class="icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="answer-section">
+                    <div class="answer-label">Câu trả lời</div>
+                    <div class="content-text">
+Cả hai đều thể hiện tính Đa hình (Polymorphism) trong Java:
+<ul>
+    <li><b>Overloading (Nạp chồng phương thức):</b> Định nghĩa nhiều phương thức cùng tên nhưng khác danh sách tham số trong cùng 1 class. Diễn ra ở quá trình Compile-time (Đa hình tĩnh).</li>
+    <li><b>Overriding (Ghi đè phương thức):</b> Lớp con định nghĩa lại phương thức đã có ở lớp cha. Cùng tên, cùng tham số, cùng (hoặc kiểu con của) kiểu trả về. Diễn ra ở quá trình Run-time (Đa hình động).</li>
+</ul>
+<b>Quy tắc Overriding:</b> Cùng tên, cùng tham số, Access Modifier không được để hẹp hơn cha, phương thức private/static/final không thể override (static chỉ bị hiding).
+                    </div>
+                </div>
+                <div class="answer-section">
+                    <div class="answer-label">Ví dụ</div>
+                    <div class="example-box">
+<b>Overloading:</b>
+<pre>
+class MathUtils {
+    public int sum(int a, int b) { return a + b; }
+    public double sum(double a, double b) { return a + b; }
+}
+</pre>
+<b>Overriding:</b>
+<pre>
+class Animal {
+    public void sound() { System.out.println("No sound"); }
+}
+class Dog extends Animal {
+    @Override
+    public void sound() { System.out.println("Gâu gâu"); }
+}
+</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                5. OOP là gì? 4 tính chất chính là gì?
+                <span class="icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="answer-section">
+                    <div class="answer-label">Câu trả lời</div>
+                    <div class="content-text">
+OOP (Lập trình Hướng đối tượng) giúp mã nguồn ưu việt, dễ tái sử dụng, dễ bảo trì, bảo mật cao và dễ quy mô hóa. Bốn tính chất chính:
+<ul>
+    <li><b>Đóng gói (Encapsulation):</b> Che giấu dữ liệu (fields) bằng private và chỉ cho phép truy xuất/cập nhật thông qua public getter/setter. Ngăn các tác động sai lệch từ bên ngoài.</li>
+    <li><b>Kế thừa (Inheritance):</b> Cho phép lớp con kế thừa những đặc tính (field, method) của lớp cha để tái sử dụng mã nguồn. Mở rộng thêm đặc tính mới mà k cần viết lại code.</li>
+    <li><b>Đa hình (Polymorphism):</b> Một thông điệp có thể được phản hồi theo nhiều cách khác nhau tùy vào đối tượng thực thi (nhờ Overloading và Overriding).</li>
+    <li><b>Trừu tượng (Abstraction):</b> Chú trọng vào những mô tả cốt lõi, bỏ qua chi tiết triển khai phức tạp bên trong (dùng Abstract class và Interface).</li>
+</ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                6. Làm sao để tạo một lớp bất biến (Immutable Class)?
+                <span class="icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="answer-section">
+                    <div class="answer-label">Câu trả lời</div>
+                    <div class="content-text">
+Lớp bất biến là lớp mà đối tượng của nó không bị thay đổi trạng thái sau khi đã khởi tạo (VD: String). Cách tạo:
+1. Đánh dấu class là <code>final</code> (để không bị kế thừa).
+2. Các fields phải được đánh dấu là <code>private</code> và <code>final</code>.
+3. Khởi tạo giá trị thông qua <code>Constructor</code> duy nhất.
+4. KHÔNG cung cấp phương thức <code>setter</code>.
+5. Nếu trong lớp có chứa field là kiểu tham chiếu có thể thay đổi (Mutable object), hãy Make a deep copy khi trả ra trong getter.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                7. Ba interface chính trong Collections Framework?
+                <span class="icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="answer-section">
+                    <div class="answer-label">Câu trả lời</div>
+                    <div class="content-text">
+<ul>
+    <li><b>List:</b> Tập hợp lưu trữ chứa các phần tử có thứ tự (theo index) và CHO PHÉP phần tử trùng lặp. (Ví dụ: ArrayList, LinkedList).</li>
+    <li><b>Set:</b> Tập hợp KHÔNG có thứ tự xác định và KHÔNG CHO PHÉP phần tử trùng lặp. (Ví dụ: HashSet, TreeSet, LinkedHashSet).</li>
+    <li><b>Map:</b> Tập hợp lưu trữ theo danh sách <code>Key-Value</code>, trong đó mọi Value liên kết tới 1 Key duy nhất, Key KHÔNG được trùng lặp. (Ví dụ: HashMap, TreeMap).</li>
+</ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                8. Xử lý ngoại lệ (Exception Handling)
+                <span class="icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="answer-section">
+                    <div class="answer-label">Câu trả lời</div>
+                    <div class="content-text">
+<b>Exception:</b> Là sự kiện không mong đợi làm gián đoạn luồng chương trình.
+<ul>
+    <li><b>Checked exception:</b> Ngoại lệ bắt buộc phải xử lý tại lúc Compile code (compiler sẽ báo lỗi nếu không try-catch hoặc throws). Phục vụ cho các lỗi dự đoán được như IOException, SQLException.</li>
+    <li><b>Unchecked exception:</b> Ngoại lệ xảy ra ở lúc Runtime, thường do logic lập trình (kế thừa từ RuntimeException). Bắt không bắt cũng được, nhưng chương trình sẽ sập. VD: NullPointerException, ArithmeticException.</li>
+</ul>
+<b>Lưu ý với Finally Block:</b>
+Khối `finally` LUÔN chạy dù có lỗi hay không. Nếu trong `finally` chứa lệnh `return`, nó sẽ GHI ĐÈ mọi lệnh `return` trước đó trong try/catch.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TAB 2: SDLC -->
+    <div id="sdlc" class="tab-content">
+        
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                1. Mô hình Thác nước (Waterfall)
+                <span class="icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="answer-section">
+                    <div class="answer-label">Câu trả lời</div>
+                    <div class="content-text">
+Là mô hình phát triển tuần tự: làm xong bước này mới sang bước kia (Phân tích -> Thiết kế -> Code -> Test -> Triển khai).
+<b>Ưu điểm:</b> Quy trình rõ, tài liệu đầy đủ, dễ quản lý.
+<b>Nhược điểm:</b> Rất kém linh hoạt khi có thay đổi. Thường lúc test và deploy (cuối dự án) khách hàng mới thấy sản phẩm, nếu sai sẽ sửa rất đắt đỏ.
+<b>Áp dụng:</b> Dự án yêu cầu cố định, ít biến động.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                2. Agile & Scrum
+                <span class="icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="answer-section">
+                    <div class="answer-label">Câu trả lời</div>
+                    <div class="content-text">
+<b>Agile:</b> Không phải là 1 mô hình tĩnh, mà là tư tưởng phát triển linh hoạt. Làm phần mềm chia thành các vòng lặp nhỏ (Sprint), ưu tiên sản phẩm chạy được hơn tài liệu, luôn tương tác với khách hàng.
+<b>Scrum:</b> Là một Framework thực hành Agile.
+- Vai trò: Product Owner (chủ sp), Scrum Master (quản trị quy trình), Dev Team.
+- Các hoạt động: Sprint (thường 2-4 tuần), Planing (Lên kế hoạch), Daily (Họp hằng ngày 15p), Review (Review cuối sprint), Retrospective (Rút kinh nghiệm).
+<b>Ưu điểm:</b> Thích nghi tốt sửa đổi liên tục, bàn giao sớm phần mềm có giá trị.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                3. Các mô hình khác (V-Model, Spiral, Kanban, Prototype)
+                <span class="icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="answer-section">
+                    <div class="answer-label">Câu trả lời</div>
+                    <div class="content-text">
+<ul>
+    <li><b>V-Model:</b> Nhấn mạnh vào Kiểm thử. Mỗi một cấp độ Code sẽ tương ứng với một cấp độ Test (Unit test đi với Coding, Integration test đi với Design...).</li>
+    <li><b>Spiral (Xoắn ốc):</b> Phát triển lặp đi lặp lại nhưng tập trung cực mạnh vào việc Đánh Giá Rủi Ro. Thích hợp siêu dự án phức tạp.</li>
+    <li><b>Prototype (Nguyên mẫu):</b> Làm nhanh 1 bản mẫu đưa khách xem trước để chốt yêu cầu, sau đó lấy phản hồi rồi mới phát triển hệ thống chính.</li>
+    <li><b>Kanban:</b> Quản lý bằng trạng thái luồng (To Do, In Progress, Done). Không giới hạn thời gian lặp như Scrum, chủ yếu quản lý tiến độ trực quan.</li>
+</ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TAB 3: DSA -->
+    <div id="dsa" class="tab-content">
+        
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                1. Phân biệt HashMap và HashSet
+                <span class="icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="answer-section">
+                    <div class="answer-label">Câu trả lời</div>
+                    <div class="content-text">
+<ul>
+    <li><b>HashMap:</b> Lưu dữ liệu dưới dạng cặp cấu trúc `Key-Value`. Dùng hàm băm (Hash) để tra cứu dữ liệu cực nhanh thông qua Key.</li>
+    <li><b>HashSet:</b> Chỉ lưu một tập các `Phần tử cấu trúc đơn lẻ`. Nó không cho phép lưu giá trị trùng lặp. Rất tốt để phát hiện trùng lặp dữ liệu.
+        <i>Bên trong HashSet bản chất thực ra sử dụng một bản đồ HashMap (các phần tử gắn vào Key, còn Value là 1 biến Dummy).</i></li>
+</ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                2. Các thuật toán sắp xếp (Sorting Algorithms)
+                <span class="icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="answer-section">
+                    <div class="answer-label">Câu trả lời</div>
+                    <div class="content-text">
+<ul>
+    <li><b>Bubble Sort (Nổi bọt):</b> So sánh từng cặp phần tử liền kề và đổi chỗ nếu sai thứ tự. Lặp liên tục đẩy phần tử to nhất về cuối cùng.</li>
+    <li><b>Selection Sort (Chọn):</b> Lặp mảng để tìm ra phần tử nhỏ nhất, sau đó đem nó nhét về đầu mảng (vùng đã được sắp xếp).</li>
+    <li><b>Insertion Sort (Chèn):</b> Lấy từng phần tử và dò ngược về bên trái các dãy số đã sắp xếp, tìm vị trí đúng và chèn vào đó.</li>
+</ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                3. Các cấu trúc dữ liệu cơ bản khác (Stack, Linked List, Tree)
+                <span class="icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="answer-section">
+                    <div class="answer-label">Câu trả lời</div>
+                    <div class="content-text">
+<ul>
+    <li><b>Tìm kiếm nhị phân (Binary Search):</b> Hiệu quả nhất khi mảng đã được SẮP XẾP. Nó chia đôi mảng tìm kiếm siêu nhanh O(log N).</li>
+    <li><b>Ngăn xếp (Stack):</b> Hoạt động theo quy tắc <b>LIFO</b> (Last In First Out - Vào cuối ra trước). 
+    Ví dụ: Undo hành động, phím Back trên trình duyệt web. Phương thức chính: push(), pop().</li>
+    <li><b>Danh sách liên kết (Linked List):</b> Cấu trúc thay vì mảng tĩnh tĩnh, mỗi phần tử (Node) chứa Dữ liệu + Con trỏ trỏ đến Node tiếp theo. Rất tiện lợi cho thao tác chèn/xóa ở giữa.</li>
+    <li><b>Cây nhị phân (Binary Tree):</b> Mỗi nút mẹ có tối đa 2 nút con. Nhánh trái luôn nhỏ hơn hoặc bằng hàm mẹ, nhánh phải lớn hơn. Rất hiệu quả khi tra cứu, tổ chức hệ thống folder.</li>
+</ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function switchTab(tabId) {
+        // Remove active class from all buttons and contents
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        
+        // Add active class to clicked button and target tab
+        event.target.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    }
+
+    function toggleAccordion(headerElement) {
+        const item = headerElement.parentElement;
+        const bodyContent = item.querySelector('.accordion-body');
+        
+        // Toggle the specific item clicked
+        headerElement.classList.toggle('active');
+        bodyContent.classList.toggle('active');
+        
+        // Optional: Close other open accordions
+        // document.querySelectorAll('.accordion-header').forEach(header => {
+        //     if(header !== headerElement) {
+        //         header.classList.remove('active');
+        //         header.parentElement.querySelector('.accordion-body').classList.remove('active');
+        //     }
+        // });
+    }
+</script>
+
+</body>
+</html>

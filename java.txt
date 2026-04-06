@@ -1,0 +1,371 @@
+So sánh Interface và Abstract Class
+-	Interface: dùng khi các đối tượng khác nhau nhưng có liên kết chung ví dụ: các phương thức thanh toán khác nhau như mbbank và bidv, nhưng dùng chung 1 phương thức payment 
+
+-	Abstract classes: dùng khi các lớp có quan hệ cha con, muốn dùng chung thuộc tính, phương thức, chia sẻ  code chung 
+có thể có method với body, field, constructor; class con dùng extends.
+Một class chỉ extends 1 abstract class nhưng implements nhiều interface.
+
+ 
+Liệt kê các kiểu dữ liệu trong Java
+Trong Java, các loại dữ liệu được chia thành hai nhóm chính: Kiểu dữ liệu nguyên thủy (Primitive Data Type) và Kiểu dữ liệu tham chiếu (Reference Data Type).
+Kiểu dữ liệu nguyên thủy (Primitive Data Type)
+Các kiểu dữ liệu này lưu trữ giá trị trực tiếp và được chia thành 8 loại cơ bản:
+Loại	Miêu tả 	Kích thước 	Giá trị mặc định
+Byte	Số nguyên, từ -128 đến 127	1 byte	0
+Short	Số nguyên, từ -32,768 đến 32,767	2 byte	0
+Int	ố nguyên, từ -2^31 đến 2^31-1	4 byte	0
+Long 	Số nguyên, từ -2^63 đến 2^63-1	8 byte	0L
+Float	Số thực, độ chính xác đơn	4 byte 	0.0f
+Double 	Số thực, độ chính xác kép	8 byte	0.0d
+Char	Ký tự Unicode	2 byte	‘\u0000’
+Boolean	Giá trị đúng hoặc sai	1 bit	false
+Kiểu dữ liệu tham chiếu (Reference Data Type)
+Các kiểu dữ liệu này lưu trữ địa chỉ (tham chiếu) của đối tượng trong bộ nhớ. Chúng bao gồm:
+Loại 	Miêu tả
+String	Chuỗi ký tự
+Array	Mảng các phần tử cùng kiểu
+List	Định nghĩa các đối tượng
+Interface	Định nghĩa hành vi cho các lớp
+Enum 	Kiểu liệt kê, đại diện cho tập các hằng số
+ 
+Tính năng nổi bật của Java so với các ngôn ngữ khác?
+-	Nền tảng độc lập chạy trên JVM ( viết 1 lần chạy mọi nơi )
+-	Hướng đối tượng giúp mã nguồn dễ mở rộng, dễ bảo trì, điều này dễ phát triển dự án lớn
+-	Quản lý bộ nhớ tự động: java tích hợp cơ chế garbage collection giúp giải phóng bộ nhớ tự động khi đối tượng k còn sử dụng -> giảm rò rỉ thông tin, tối ưu hiệu suất
+-	Bảo mật cao: kiểm soát truy cập, mã hóa, sandboxing giúp bảo vệ giữ liệu hệ thống 
+-	Thư viện phong phú, cộng đồng lớn -> dễ học hỏi, dễ xử lý 
+Các công cụ phát triển như JVM, JRE, và JDK khác nhau như thế nào?
+Thành phần 	Mô tả	Mục đích 
+JVM (Java Virtual Machine)	để chạy mã bytecode của Java. Thực hiện quá trình biên dịch mã thành mã máy để java có thể chạy được 	Giúp ứng dụng Java chạy trên mọi nền tảng hỗ trợ JVM mà không cần thay đổi mã nguồn (Write Once, Run Anywhere).
+JRE (Java Runtime Environment)	Java Runtime Environment là môi trường để chạy các ứng dụng Java. Nó bao gồm JVM và các thư viện lớp Java cần thiết.	Cho phép người dùng chạy các ứng dụng Java đã được biên dịch mà không cần JDK.
+JDK (Java Development Kit)	JDK là bộ công cụ phát triển phần mềm Java. Nó bao gồm JRE, JVM, cùng các công cụ phát triển như trình biên dịch javac, trình gỡ lỗi.	Cung cấp môi trường để lập trình viên phát triển, biên dịch và kiểm thử các ứng dụng Java.
+
+Các loại biến trong Java là gì?
+Trong Java, có bốn loại biến chính: biến cục bộ ( biến local ) khai báo trong phương thức, constructor hoặc khối mã và chỉ có thể truy cập trong phạm vi 
+public class Demo {
+    public void show() {
+        int age = 20;
+        System.out.println("Tuoi: " + age);
+    }
+}
+, biến thành viên ( biến instance )
+ 
+ 
+, biến tĩnh ( biến static)
+Biến này thuộc về lớp ko phải đối tượng, khai báo thì các đối tượng sẽ dùng chung 1 biến
+
+, biến hằng ( biến constant)  
+Khai báo với từ khóa final và k thể thay đổi 	
+
+•	final: Dùng để khai báo hằng số hoặc phương thức không thể ghi đè, và lớp không thể kế thừa.
+•	static: Biến hoặc phương thức được khai báo là static sẽ tồn tại ở cấp lớp, nghĩa là chúng không phụ thuộc vào đối tượng và có thể được truy cập trực tiếp từ lớp.
+•	abstract: Được dùng cho lớp hoặc phương thức trừu tượng. Một lớp trừu tượng không thể được khởi tạo và thường được kế thừa.
+•	this: Đại diện cho đối tượng hiện tại trong phương thức hoặc constructor.
+•	super: Dùng để tham chiếu đến lớp cha hoặc phương thức của lớp cha trong lớp con.
+•	enum: Được sử dụng để định nghĩa các hằng số dạng liệt kê.
+Khái niệm Overloading và Overriding là gì? Nêu ví dụ minh họa.
+
+Trong java thì overloading và overriding là 2 cơ chế của tính đa hình:
+-	overloading là nạp chồng phương thức: dùng để định nghĩa nhiều phương thức trên cùng 1 lớp nhưng khác nhau về tham số xảy ra ở compile – time. Vd: hàm tính tổng sẽ được định nghĩa để phù hợp với kiểu dữ liệu khác nhau ( int, double, float,…)
+
+-	Overriding là ghi đè phương thức: dùng để định nghĩa lại phương thức của lớp cha trên lớp con. Ghi đè phương thức phải có cùng tên, kiểu trả về như lớp cha. Mục tiêu là để có nhiều phiên bản phù hợp hơn. Xảy ra ở runtime. vd: lớp animal có hàm tiếng kêu thì lớp chó cần ghi đè để có tiếng kêu riêng 
+
+Constructor là gì? Khác gì với phương thức (method) thông thường?
+
+Là hàm khởi tạo đối tượng, cùng tên với lớp, ko có kiểu trả về. được gọi tự động khi 1 đối tượng tạo ra
+Khác với phương thức là phương thức có hàm,  tên riêng biệt và có kiểu trả về và có thể gọi bất kể lúc nào
+Static keyword có vai trò gì? Static block và static method khác nhau như thế nào?
+
+-	Biến static là biến dc chia sẻ giữa tất cả đối tượng của 1 lớp. ko bị thay đổi giá trịp. nó có thể truy cập và thay đổi các biến stactic 
+-	static
+
+OOP
+
+OOP là gì? 4 tính chất chính là gì?
+OOP là phương pháp lập trình hướng đến đối tượng và lớp. OOP giúp cho src code tối ưu, dễ tái sử dụng, dễ bảo trì, bảo mật cao ( tính đóng gói ), dễ mở rộng
+-	Tính đóng gói: tính đóng gói thể hiện ở chỗ cho phép che giấu thông tin, phương thức của 1 đối tượng. Các đối tượng khác không thể tác động trực tiếp đến dữ liệu và thông tin của đối tượng đó nếu không thông qua các phương thức được đối tượng đó công cấp công khai
+-	Tính kế thừa: là tính chất được sử dụng nhiều trong OOP, cho phép 1 lớp mới ( lớp con) kế thừa và tái sử dụng các đặc tính của lớp cũ (lớp cha). Các lớp con kế thừa toàn bộ thành phần của lớp cha mà không cần định nghĩa lại. Lớp con có thể mở rộng thêm các thành phần kế thừa
+-	Tính đa hình: Tính đa hình thể hiện ở việc các đối tượng khác nhau có thể thực thi cùng phương thức giống nhau theo cách khác nhau
+-	Tính trừu tượng: tính trừu tượng giúp loại bỏ những thứ phức tạp không cần thiết của đối tượng, chỉ tập trung vào những gì cốt lõi
+overriding có những quy tắc gì?
+Câu hỏi:
+Method override phải tuân thủ quy tắc nào?
+Trả lời:
+•	Cùng tên method 
+•	Cùng danh sách tham số 
+•	Kiểu trả về giống hoặc covariant 
+•	Access modifier không được hẹp hơn 
+•	Không override được final 
+•	private không override được 
+•	static không override thật, chỉ là hiding
+
+
+ 
+Làm sao để tạo một lớp bất biến (immutable class) trong Java?
+B1: đánh dấu lớp là final
+B2: đánh dấu các fields là private và final
+B3: khởi tạo các giá trị của các trường qua constructor : vì constuctor k cho phép thay đổi giá trị đối tượng khi tạo ra 
+B4: k cung cấp setter và getter
+
+Phân biệt this và super
+- this: tham chiếu đến đối tượng hiện tại, để gọi constuctor trên cùng class
+- super: tham chiếu đến lớp cha, gọi constructor của lớp cha 
+Anonymous class là gì? Khi nào nên sử dụng?
+Anonymous class trong Java là một lớp không có tên và được định nghĩa ngay tại chỗ, thường là khi bạn cần một lớp để thực thi một interface hoặc kế thừa một lớp. Nó giúp tiết kiệm không gian mã và thường được sử dụng trong những tình huống cần một triển khai tạm thời mà không muốn tạo ra một lớp con riêng biệt.
+
+Ba interface chính trong Collections Framework là:
+- list: tập hợp các phần tử có thứ tự và có thể trùng lặp. vd : array list 
+- set: ko có thứ tự và ko trùng lặp hashset, linkedhashset
+- map:	tập hợp các cặp key – value, mỗi khóa liên kết với 1 giá trị. vd: Hashmap, linkedhashmap, tree map
+Các phương pháp để duyệt qua một List trong Java? (for-each, Iterator, Stream)
+
+Comparator và Comparable khác nhau như thế nào? Khi nào dùng cái nào?
+-	Comparable là một interface được sử dụng để so sánh các đối tượng trong cùng một lớp.
+-	Comparator, ngược lại, là một interface được sử dụng để so sánh các đối tượng của nhiều lớp khác nhau hoặc các đối tượng mà không thể thay đổi mã nguồn của lớp
+Các câu hỏi phỏng vấn Java liên quan đến Exception Handling (Xử lý ngoại lệ)
+
+Exception: là sự kiện xảy ra không mong đợi, trong quá trình thực thi gây gián đoạn luồng điều khiển bình thường của ứng dụng. Khi ngoại lệ xảy ra thì chương trình sẽ được đưa vào exception để xử lý hoặc kết thúc
+checked exception: ngoại lệ phải yêu cầu xử lý, thường là các ngoại lệ có thể dự đoán được và có khả năng dự đoán chẳng hạn như các IOException, SQLexcepion 	
+Unchecked exception: ngoại lệ ko bắt buộc xử lý, thường là lỗi do lập trình. Được kế thừa từ runtime vd:  NullPointerException, ArrayIndexOutOfBoundsException
+Nếu finally block có chứa lệnh return, kết quả sẽ như thế nào?
+Khi một lệnh return xuất hiện trong finally block, nó sẽ ghi đè lên giá trị trả về từ phương thức, kể cả khi có return trong try hoặc catch block
+ 
+
+
+Các mô hình phát triển phần mềm
+Mô hình phát triển phần mềm là cách tổ chức các bước để xây dựng một hệ thống phần mềm từ lúc khảo sát yêu cầu đến khi bàn giao, bảo trì.
+Mỗi mô hình có cách làm khác nhau, phù hợp với từng loại dự án.
+1. Mô hình Thác nước (Waterfall)
+Khái niệm
+Đây là mô hình phát triển tuần tự, nghĩa là làm xong bước này mới chuyển sang bước tiếp theo, giống như nước chảy từ trên xuống dưới.
+Các giai đoạn
+1.	Phân tích yêu cầu 
+2.	Thiết kế hệ thống 
+3.	Lập trình 
+4.	Kiểm thử 
+5.	Triển khai 
+6.	Bảo trì 
+Đặc điểm
+•	Quy trình rõ ràng, dễ quản lý 
+•	Tài liệu đầy đủ 
+•	Khó quay lại sửa bước trước khi đã sang bước mới 
+Ưu điểm
+•	Dễ hiểu, dễ áp dụng 
+•	Phù hợp với dự án có yêu cầu rõ ràng ngay từ đầu 
+•	Dễ quản lý tiến độ 
+Nhược điểm
+•	Không linh hoạt khi yêu cầu thay đổi 
+•	Khách hàng thường chỉ thấy sản phẩm ở giai đoạn cuối 
+•	Nếu sai từ đầu thì sửa rất tốn chi phí 
+Phù hợp khi nào
+•	Dự án nhỏ hoặc vừa 
+•	Yêu cầu ổn định, ít thay đổi 
+•	Dự án cần nhiều tài liệu, quy trình chặt chẽ 
+________________________________________
+2. Mô hình Chữ V (V-Model)
+Khái niệm
+Đây là biến thể của Waterfall, nhấn mạnh mối liên hệ giữa phát triển và kiểm thử.
+Mỗi giai đoạn phát triển sẽ có một giai đoạn kiểm thử tương ứng.
+Cấu trúc cơ bản
+•	Phân tích yêu cầu ↔ Kiểm thử chấp nhận 
+•	Thiết kế hệ thống ↔ Kiểm thử hệ thống 
+•	Thiết kế chi tiết ↔ Kiểm thử tích hợp 
+•	Lập trình ↔ Kiểm thử đơn vị 
+Ưu điểm
+•	Kiểm thử được chuẩn bị sớm 
+•	Dễ phát hiện lỗi hơn Waterfall 
+•	Chất lượng phần mềm tốt hơn nếu quy trình nghiêm túc 
+Nhược điểm
+•	Vẫn kém linh hoạt khi yêu cầu thay đổi 
+•	Không phù hợp với dự án có nhiều thay đổi liên tục 
+Phù hợp khi nào
+•	Dự án yêu cầu chất lượng cao 
+•	Hệ thống cần kiểm thử nghiêm ngặt 
+________________________________________
+3. Mô hình Xoắn ốc (Spiral)
+Khái niệm
+Mô hình này kết hợp giữa phát triển từng bước và quản lý rủi ro.
+Dự án được chia thành nhiều vòng lặp, mỗi vòng gồm phân tích, thiết kế, lập trình, kiểm thử và đánh giá rủi ro.
+Các bước trong một vòng xoắn
+1.	Xác định mục tiêu 
+2.	Phân tích và đánh giá rủi ro 
+3.	Phát triển và kiểm thử 
+4.	Lập kế hoạch cho vòng tiếp theo 
+Đặc điểm
+•	Làm theo từng vòng 
+•	Mỗi vòng cải tiến sản phẩm thêm 
+•	Tập trung mạnh vào việc giảm rủi ro 
+Ưu điểm
+•	Quản lý rủi ro tốt 
+•	Linh hoạt hơn Waterfall 
+•	Phù hợp với dự án lớn, phức tạp 
+Nhược điểm
+•	Khó quản lý 
+•	Tốn chi phí 
+•	Cần đội ngũ có kinh nghiệm 
+Phù hợp khi nào
+•	Dự án lớn 
+•	Hệ thống có nhiều rủi ro kỹ thuật 
+•	Yêu cầu chưa rõ hoàn toàn từ đầu 
+________________________________________
+4. Mô hình Lặp (Iterative Model)
+Khái niệm
+Phần mềm được phát triển qua nhiều lần lặp. Mỗi lần lặp sẽ bổ sung hoặc cải tiến một phần chức năng.
+Đặc điểm
+•	Không cần hoàn thiện toàn bộ ngay từ đầu 
+•	Mỗi vòng lặp tạo ra một phiên bản tốt hơn 
+Ưu điểm
+•	Dễ thích nghi với thay đổi 
+•	Phản hồi từ người dùng đến sớm 
+•	Giảm rủi ro hơn làm một lần toàn bộ 
+Nhược điểm
+•	Cần quản lý tốt phạm vi từng lần lặp 
+•	Có thể phát sinh lỗi kiến trúc nếu thiết kế ban đầu không tốt 
+Phù hợp khi nào
+•	Dự án có thể phát triển dần 
+•	Muốn ra bản dùng thử sớm 
+________________________________________
+5. Mô hình Tăng trưởng dần (Incremental Model)
+Khái niệm
+Hệ thống được chia thành nhiều phần nhỏ. Mỗi phần được phát triển và bàn giao dần dần.
+Ví dụ
+•	Đợt 1: đăng nhập, đăng ký 
+•	Đợt 2: quản lý sản phẩm 
+•	Đợt 3: thanh toán, báo cáo 
+Ưu điểm
+•	Có thể bàn giao sớm một phần hệ thống 
+•	Dễ kiểm soát tiến độ 
+•	Người dùng có thể sử dụng sớm 
+Nhược điểm
+•	Cần thiết kế tổng thể tốt từ đầu 
+•	Nếu chia không hợp lý sẽ khó ghép các phần lại 
+Phù hợp khi nào
+•	Dự án cần ra sản phẩm nhanh từng phần 
+•	Hệ thống có thể tách module rõ ràng 
+________________________________________
+6. Mô hình Nguyên mẫu (Prototype Model)
+Khái niệm
+Đầu tiên xây dựng một bản mẫu để khách hàng xem, góp ý rồi mới hoàn thiện hệ thống chính thức.
+Mục đích
+•	Làm rõ yêu cầu 
+•	Giúp khách hàng hình dung sản phẩm 
+Ưu điểm
+•	Khách hàng dễ góp ý 
+•	Giảm hiểu sai yêu cầu 
+•	Phù hợp khi yêu cầu ban đầu chưa rõ 
+Nhược điểm
+•	Khách hàng có thể tưởng prototype là sản phẩm hoàn chỉnh 
+•	Có thể mất thời gian làm lại nếu prototype chỉ mang tính minh họa 
+Phù hợp khi nào
+•	Dự án mới 
+•	Yêu cầu người dùng chưa rõ 
+•	Cần demo nhanh giao diện/chức năng 
+________________________________________
+7. Agile
+Khái niệm
+Agile là phương pháp phát triển phần mềm linh hoạt, chia công việc thành các vòng ngắn, thường xuyên trao đổi với khách hàng và cải tiến liên tục.
+Tư tưởng chính
+•	Ưu tiên phần mềm chạy được hơn tài liệu quá nặng 
+•	Ưu tiên phản hồi khách hàng 
+•	Sẵn sàng thích nghi với thay đổi 
+•	Làm việc nhóm và cải tiến liên tục 
+Đặc điểm
+•	Phát triển theo vòng ngắn 
+•	Giao tiếp thường xuyên 
+•	Có thể thay đổi yêu cầu trong quá trình làm 
+•	Bàn giao sản phẩm sớm và nhiều lần 
+Ưu điểm
+•	Rất linh hoạt 
+•	Phù hợp với môi trường thay đổi nhanh 
+•	Khách hàng được tham gia nhiều 
+•	Phát hiện lỗi và điều chỉnh sớm 
+Nhược điểm
+•	Khó áp dụng nếu khách hàng không phối hợp 
+•	Cần đội ngũ chủ động, giao tiếp tốt 
+•	Có thể khó dự đoán chính xác chi phí và thời gian ngay từ đầu 
+Phù hợp khi nào
+•	Dự án phần mềm hiện đại 
+•	Startup, sản phẩm web/app 
+•	Yêu cầu thay đổi thường xuyên 
+________________________________________
+8. Scrum
+Khái niệm
+Scrum là một framework phổ biến trong Agile. Công việc được chia thành các Sprint ngắn, thường từ 1 đến 4 tuần.
+Vai trò trong Scrum
+•	Product Owner: đại diện khách hàng, quản lý yêu cầu 
+•	Scrum Master: hỗ trợ nhóm làm đúng quy trình Scrum 
+•	Development Team: đội phát triển 
+Các hoạt động chính
+•	Sprint Planning 
+•	Daily Scrum 
+•	Sprint Review 
+•	Sprint Retrospective 
+Ưu điểm
+•	Quản lý công việc rõ ràng 
+•	Theo dõi tiến độ thường xuyên 
+•	Cải tiến liên tục qua từng sprint 
+Nhược điểm
+•	Cần team phối hợp tốt 
+•	Nếu áp dụng máy móc sẽ dễ biến thành họp nhiều nhưng hiệu quả thấp 
+________________________________________
+9. Kanban
+Khái niệm
+Kanban là cách quản lý công việc bằng bảng trạng thái như:
+•	To Do 
+•	In Progress 
+•	Testing 
+•	Done 
+Đặc điểm
+•	Trực quan 
+•	Giới hạn số việc đang làm 
+•	Tối ưu luồng công việc liên tục 
+Ưu điểm
+•	Dễ áp dụng 
+•	Nhìn được ngay công việc đang ở đâu 
+•	Phù hợp team bảo trì, support, vận hành 
+Nhược điểm
+•	Nếu không kiểm soát tốt vẫn có thể bị dồn việc 
+•	Không có nhịp sprint rõ như Scrum 
+________________________________________
+So sánh nhanh các mô hình
+Waterfall
+•	Làm tuần tự 
+•	Ít linh hoạt 
+•	Phù hợp yêu cầu rõ ràng 
+Spiral
+•	Làm theo vòng 
+•	Có phân tích rủi ro 
+•	Phù hợp dự án lớn, phức tạp 
+Prototype
+•	Làm bản mẫu trước 
+•	Phù hợp khi yêu cầu chưa rõ 
+Incremental / Iterative
+•	Xây dựng dần từng phần 
+•	Có thể bàn giao sớm 
+Agile
+•	Linh hoạt, thích nghi nhanh 
+•	Phù hợp sản phẩm hiện đại, thay đổi liên tục 
+ 
+
+
+
+ 
+Cấu trúc dữ liệu giải thuật
+
+HashMap là gì? : là cấu trúc dữ liệu lưu theo cặp key – value , sử dụng hàm băm để tra cứu nhanh theo key
+HashSet: là tập hợp không cho phép các phần tử trùng lặp, thường dùng để kiểm tra tồn tại hoặc phát hiện trùng nhanh
+Hashmap: lưu key value, HashSet: lưu phần tử duy nhất
+Bubble sort: so sánh từng cặp phần tử liền kề và đổi chỗ nếu sai thứ tự
+selection sort: vòng lặp  tìm phần tử nhỏ nhất trong phần chưa sắp xếp đưa về đầu
+Insertion sort: lấy phần tử và chèn đúng vào vị trí trong đoạn bên bên trái đã được sắp xếp 
+Thời điểm tốt nhất để áp dụng tìm kiếm nhị phân: khi dữ liệu đã được sắp xếp tăgng dần hoặc giảm dần, không có sự thay đổi thường xuyên trong dữ liệu
+Danh sách liên kết là cấu trcs dữ liệu trong đó các phần tử được tổ chức thành các nút mỗi nút chứa dữ liệu và liên kết đến nút tiếp theo
+
+Các khu vực cấu trúc dữ liệu bao gồm mảng, danh sách liên kết, ngăn xếp, đồ thị, bảng băm và nhiều cấu trúc dữ liệu khác để tổ chức, lưu trữ dữ liệu một cách có tổ chức và hiệu quả
+
+LIFO; last in first out: 1 nguyên tắc hoạt động trong cấu trúc dữ liệu ngăn sếp ( stack ). Phần tử vào cuối sẽ ra trước
+Cây nhị phân: cấu trúc dữ liệu trong đó mỗi nút có tối đa 2 nút con. Nút trái dại diện cho giá trị nhỏ hơn hoặc bằng nút cha, trong khi nút phải đại diện giá  trị lớn hơn. Cây nhị phân được dùng trong tìm kiếm, sắp xếp và thực hiện các thao tác trên dữ liệu 1 cách hiệu quả
+
+Ngăn xếp : ( stack ) là cáu trúc dữ lệu trong đó các phần tử được thêm vào và lấy ra theo nguyên tắc LIFO . các hoạt động chính trên năn xếp bao gồm đẩy đẻ thêm phần tử vào đỉnh ngăn xếp và pop để lấy phẩn tử ra khỏi ngăn xếp
+
+

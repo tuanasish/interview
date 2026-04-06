@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Intern Interview - Tích hợp Java.txt</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'Courier New', monospace;
+            --color-primary: #2563eb;
+            --color-primary-dark: #1d4ed8;
+            --color-background-primary: #ffffff;
+            --color-background-secondary: #f8fafc;
+            --color-border-primary: #2563eb;
+            --color-border-secondary: #cbd5e1;
+            --color-border-tertiary: #e2e8f0;
+            --color-text-primary: #0f172a;
+            --color-text-secondary: #334155;
+            --color-text-tertiary: #64748b;
+            --border-radius-md: 8px;
+            --border-radius-lg: 12px;
+            --success-bg: #EAF3DE; --success-color: #3B6D11;
+            --warning-bg: #FAEEDA; --warning-color: #854F0B;
+            --danger-bg: #FCEBEB; --danger-color: #A32D2D;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-sans); background: #f1f5f9; padding: 2rem; color: var(--color-text-primary); }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+        
+        .header { padding: 1.5rem 0 2rem; text-align: center; }
+        .header h2 { font-size: 28px; font-weight: 700; color: var(--color-primary-dark); }
+        .header p { font-size: 15px; color: var(--color-text-secondary); margin-top: 8px; }
+
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 2rem; }
+        .stat-card {
+            background: var(--color-background-primary);
+            border-radius: var(--border-radius-md);
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid var(--color-border-tertiary);
+        }
+        .stat-num { font-size: 24px; font-weight: 600; color: var(--color-primary); }
+        .stat-label { font-size: 13px; color: var(--color-text-secondary); margin-top: 4px; }
+
+        .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; justify-content: center; }
+        .tab {
+            padding: 8px 16px;
+            border-radius: 99px;
+            border: 1px solid var(--color-border-secondary);
+            background: var(--color-background-primary);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab:hover { background: var(--color-background-secondary); border-color: var(--color-text-tertiary); }
+        .tab.active {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+        }
+
+        .search-wrap { position: relative; margin-bottom: 2rem; }
+        .search-wrap input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--color-border-secondary);
+            background: var(--color-background-primary);
+            font-size: 15px;
+            color: var(--color-text-primary);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            outline: none; transition: border-color 0.2s;
+        }
+        .search-wrap input:focus { border-color: var(--color-primary); }
+        .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 16px; color: var(--color-text-tertiary); }
+
+        .q-list { display: flex; flex-direction: column; gap: 12px; }
+
+        .q-card {
+            background: var(--color-background-primary);
+            border: 1px solid var(--color-border-tertiary);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            transition: all 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .q-card:hover { border-color: var(--color-border-secondary); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .q-card.open { border-color: var(--color-primary); }
+
+        .q-header {
+            display: flex; align-items: flex-start; gap: 16px; padding: 16px 20px;
+            cursor: pointer; user-select: none;
+        }
+        .q-header:hover { background: var(--color-background-secondary); }
+
+        .q-num {
+            min-width: 32px; height: 32px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 600; flex-shrink: 0;
+            background: #e0e7ff; color: #3730a3;
+        }
+        .q-text { font-size: 15px; font-weight: 600; color: var(--color-text-primary); flex: 1; line-height: 1.5; margin-top: 5px; }
+        .q-arrow { font-size: 14px; color: var(--color-text-tertiary); flex-shrink: 0; margin-top: 5px; transition: transform 0.3s; }
+        .q-card.open .q-arrow { transform: rotate(180deg); color: var(--color-primary); }
+
+        .q-body { display: none; padding: 0 20px 20px 20px; border-top: 1px solid var(--color-border-tertiary); }
+        .q-card.open .q-body { display: block; padding-top: 16px; animation: slideDown 0.3s ease; }
+
+        .ans-section { margin-bottom: 16px; }
+        .ans-title { font-size: 12px; font-weight: 700; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .ans-title.core { color: #0284c7; }
+        .ans-title.explain { color: #d97706; }
+        .ans-title.example { color: #16a34a; }
+        
+        .q-body p, .q-body li { font-size: 14.5px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 8px; }
+        .q-body ul { padding-left: 24px; margin-bottom: 8px; }
+        
+        .q-body code.inline {
+            background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 13px; color: #e11d48;
+        }
+        .q-body pre {
+            background: #1e293b; color: #f8fafc; padding: 14px; border-radius: 8px; overflow-x: auto;
+            font-family: var(--font-mono); font-size: 13.5px; line-height: 1.5; margin-top: 4px; margin-bottom: 8px; border-left: 4px solid var(--color-primary);
+        }
+
+        .hint {
+            margin-top: 12px; padding: 12px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 4px;
+        }
+        .hint p { margin: 0; font-size: 13.5px; color: #92400e; font-weight: 500; }
+
+        .tags { margin-top: 16px; display: flex; gap: 8px; }
+        .tag { font-size: 12px; padding: 4px 10px; border-radius: 99px; font-weight: 500; }
+        
+        .diff-easy { background: var(--success-bg); color: var(--success-color); }
+        .diff-medium { background: var(--warning-bg); color: var(--warning-color); }
+        .diff-hard { background: var(--danger-bg); color: var(--danger-color); }
+        .cat-tag { background: #e2e8f0; color: #475569; }
+
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>Bộ Câu Hỏi Phỏng Vấn Java Intern</h2>
+        <p>Phiên bản đã chuẩn hóa và mở rộng thêm các câu Java Core, SQL, Spring Boot hay gặp cho vị trí Intern Java Developer.</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat-card"><div class="stat-num" id="s-total">0</div><div class="stat-label">Tổng câu hỏi</div></div>
+        <div class="stat-card"><div class="stat-num" id="s-cat">6</div><div class="stat-label">Chủ đề</div></div>
+        <div class="stat-card"><div class="stat-num" id="s-shown">0</div><div class="stat-label">Đang hiển thị</div></div>
+        <div class="stat-card"><div class="stat-num" id="s-open">0</div><div class="stat-label">Đang mở</div></div>
+    </div>
+
+    <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search" placeholder="Tìm kiếm theo chủ đề, từ khóa, câu hỏi...">
+    </div>
+
+    <div class="tabs" id="tabs"></div>
+    <div class="q-list" id="list"></div>
+</div>
+
+<script>
+const cats = [
+  { id: 'all', label: '🌟 Tất cả' },
+  { id: 'oop', label: '☕ OOP' },
+  { id: 'java', label: '🚀 Java Core' },
+  { id: 'sql', label: '🗄️ SQL & DB' },
+  { id: 'ds', label: '🧩 DL & Thuật Toán' },
+  { id: 'sdlc', label: '🔄 SDLC' },
+  { id: 'misc', label: '🔥 Spring/Misc' },
+];
+
+const questions = [
+  // OOP
+  { cat: 'oop', diff: 'easy', q: 'OOP là gì? 4 tính chất chính là gì?',
+    a: '- OOP là cách tổ chức chương trình xoay quanh lớp và đối tượng.\n- Mục tiêu chính: tái sử dụng code, dễ mở rộng, dễ bảo trì.',
+    explain: '- Encapsulation (đóng gói): ẩn dữ liệu nội bộ, truy cập qua API công khai.\n- Inheritance (kế thừa): lớp con nhận lại thuộc tính và hành vi từ lớp cha.\n- Polymorphism (đa hình): cùng lời gọi phương thức nhưng hành vi khác nhau tùy đối tượng.\n- Abstraction (trừu tượng): chỉ lộ phần cần thiết, che chi tiết triển khai.',
+    example: null, hint: 'Nhớ nhanh: Đóng gói - Kế thừa - Đa hình - Trừu tượng.' },
+  { cat: 'oop', diff: 'medium', q: 'So sánh Interface và Abstract Class',
+    a: '- Interface phù hợp khi muốn định nghĩa hợp đồng hành vi cho nhiều lớp không cùng cây kế thừa.\n- Abstract class phù hợp khi các lớp có quan hệ cha con và cần dùng chung state hoặc logic mặc định.',
+    explain: '- Một lớp chỉ extends được 1 class (kể cả abstract class), nhưng implements nhiều interface.\n- Interface có default/static method, nhưng không nên nhét quá nhiều state vào interface.',
+    example: null, hint: 'Nếu cần chia sẻ code + field dùng abstract class; nếu cần hợp đồng linh hoạt dùng interface.' },
+  { cat: 'oop', diff: 'medium', q: 'Overloading và Overriding là gì? Quy tắc Override?',
+    a: '- Overloading: cùng tên method, khác danh sách tham số, quyết định ở compile-time.\n- Overriding: lớp con định nghĩa lại method lớp cha, quyết định ở runtime.',
+    explain: 'Quy tắc override: cùng tên, cùng tham số, kiểu trả về cùng loại hoặc covariant, access modifier không được hẹp hơn, không override được method final/private, method static chỉ bị hiding.',
+    example: 'class Animal { void speak() { System.out.println(\"...\"); } }\nclass Dog extends Animal {\n  @Override\n  void speak() { System.out.println(\"Woof\"); }\n}',
+    hint: 'Intern hay bị nhầm: overload là đổi tham số, override là ghi đè hành vi.' },
+  { cat: 'oop', diff: 'easy', q: 'Làm sao để tạo một lớp bất biến (immutable class) trong Java?',
+    a: '- Đặt class là final để không bị kế thừa thay đổi hành vi.\n- Đặt field là private final và gán giá trị trong constructor.\n- Không cung cấp setter.\n- Nếu field là object mutable, trả defensive copy ở getter/constructor.',
+    explain: 'String là ví dụ điển hình của immutable class. Immutable giúp code an toàn hơn khi chạy đa luồng.',
+    example: 'public final class User {\n  private final String id;\n\n  public User(String id) {\n    this.id = id;\n  }\n\n  public String getId() {\n    return id;\n  }\n}',
+    hint: 'Nếu bên trong có List hoặc Date thì phải copy phòng vệ, không trả trực tiếp tham chiếu nội bộ.' },
+  { cat: 'oop', diff: 'easy', q: 'Phân biệt this và super',
+    a: '- this tham chiếu tới object hiện tại, dùng để gọi field/method/constructor của chính class đó.\n- super tham chiếu tới phần của lớp cha, dùng để gọi method hoặc constructor lớp cha.',
+    explain: 'Trong constructor, this(...) hoặc super(...) phải là câu lệnh đầu tiên.',
+    example: null, hint: 'Dùng super khi lớp con cần gọi logic lớp cha đã override.' },
+  { cat: 'oop', diff: 'medium', q: 'Anonymous class là gì? Khi nào nên dùng?',
+    a: 'Anonymous class là lớp không tên, khai báo và khởi tạo ngay tại chỗ.',
+    explain: 'Phù hợp cho xử lý ngắn, dùng một lần. Với functional interface, Java 8+ thường ưu tiên lambda để code gọn hơn.',
+    example: 'Runnable task = new Runnable() {\n  @Override\n  public void run() {\n    System.out.println(\"Run once\");\n  }\n};',
+    hint: 'Code lặp lại nhiều lần thì tách thành class riêng để dễ test và bảo trì.' },
+  { cat: 'oop', diff: 'easy', q: 'Constructor là gì? Khác gì với method thường?',
+    a: '- Constructor dùng để khởi tạo object, có cùng tên với class và không có kiểu trả về.\n- Method thường mô tả hành vi, có thể có hoặc không có giá trị trả về.',
+    explain: 'Constructor được gọi khi tạo object bằng new. Nếu không khai báo constructor nào, Java tạo default constructor không tham số.',
+    example: null, hint: 'Constructor không thể là static, final, abstract.' },
+  { cat: 'oop', diff: 'hard', q: 'Composition vs Inheritance: khi nào dùng cái nào?',
+    a: '- Inheritance (IS-A): dùng khi quan hệ thật sự là \"là một\".\n- Composition (HAS-A): dùng khi object được cấu thành từ nhiều thành phần.',
+    explain: 'Thực tế thường ưu tiên composition để giảm coupling và linh hoạt thay đổi hành vi qua dependency injection.',
+    example: null, hint: 'Nguyên tắc phổ biến: Favor composition over inheritance.' },
+  { cat: 'oop', diff: 'hard', q: 'Giải thích các nguyên lý SOLID',
+    a: 'S - Single Responsibility: mỗi class chỉ nên có một lý do để thay đổi.\nO - Open/Closed: mở cho mở rộng, đóng cho sửa đổi mã cũ.\nL - Liskov Substitution: class con thay được class cha mà không phá logic.\nI - Interface Segregation: tách interface lớn thành interface nhỏ, đúng nhu cầu client.\nD - Dependency Inversion: phụ thuộc abstraction thay vì implementation.',
+    explain: 'SOLID giúp thiết kế code dễ test, dễ mở rộng, giảm tác động dây chuyền khi thay đổi yêu cầu.',
+    example: null, hint: 'Trong Spring, DI và IoC là áp dụng mạnh của nguyên lý D.' },
+
+  // Java Core
+  { cat: 'java', diff: 'easy', q: 'Liệt kê kiểu dữ liệu trong Java (Primitive vs Reference)?',
+    a: '- Primitive có 8 loại: byte, short, int, long, float, double, char, boolean.\n- Reference type: String, Array, Object, class tự định nghĩa, interface, enum, collection...',
+    explain: 'Primitive lưu trực tiếp giá trị; reference lưu tham chiếu tới object trên heap.',
+    example: null, hint: 'Khi cần dùng trong Generic/List thì dùng wrapper: Integer, Long, Double...' },
+  { cat: 'java', diff: 'easy', q: 'Điểm nổi bật của Java so với nhiều ngôn ngữ khác?',
+    a: '- Chạy đa nền tảng qua JVM (Write Once, Run Anywhere).\n- Hệ sinh thái thư viện và framework lớn.\n- Quản lý bộ nhớ tự động qua Garbage Collector.\n- Cộng đồng mạnh, tài liệu và job thị trường rất nhiều.',
+    explain: 'Java vẫn rất phổ biến ở backend doanh nghiệp vì ổn định, hiệu năng tốt và tooling đầy đủ.',
+    example: null, hint: 'Khi phỏng vấn, nêu cả yếu tố kỹ thuật và hệ sinh thái là đủ điểm.' },
+  { cat: 'java', diff: 'easy', q: 'JVM, JRE, JDK khác nhau thế nào?',
+    a: '- JVM: máy ảo chạy bytecode Java.\n- JRE: môi trường chạy Java = JVM + thư viện runtime.\n- JDK: bộ cho lập trình viên = JRE + compiler (javac) + công cụ build/debug.',
+    explain: 'Muốn chạy ứng dụng chỉ cần JRE; muốn phát triển và biên dịch cần JDK.',
+    example: null, hint: 'JDK bao gồm JRE, JRE bao gồm JVM.' },
+  { cat: 'java', diff: 'easy', q: 'Các loại biến trong Java là gì?',
+    a: '- Local variable: khai báo trong method hoặc block, chỉ sống trong phạm vi đó.\n- Instance variable: thuộc từng object.\n- Static variable: thuộc class, chia sẻ giữa các object.\n- Constant: dùng final để giá trị không thay đổi sau khi gán.',
+    explain: 'Local variable bắt buộc phải khởi tạo trước khi dùng; instance/static có giá trị mặc định.',
+    example: null, hint: 'Phân biệt rõ vòng đời biến là điểm hay bị hỏi lại.' },
+  { cat: 'java', diff: 'medium', q: 'static có vai trò gì? static method và static block?',
+    a: '- static field và static method thuộc class, không cần tạo object để truy cập.\n- static method không truy cập trực tiếp instance field/method.\n- static block chạy một lần khi class được nạp, thường dùng cho khởi tạo tĩnh.',
+    explain: 'Dùng static cho utility hoặc hằng số dùng chung. Lạm dụng static dễ làm code khó test.',
+    example: null, hint: 'Ví dụ điển hình: Math.max, Collections.sort là static method.' },
+  { cat: 'java', diff: 'medium', q: 'Các interface chính trong Java Collections Framework?',
+    a: '- Collection là interface gốc cho phần lớn cấu trúc dữ liệu trong framework.\n- Các nhánh phổ biến của Collection là List, Set, Queue và Deque.\n- Map là cấu trúc key-value rất quan trọng nhưng không kế thừa Collection.',
+    explain: 'Chọn cấu trúc theo nhu cầu: cần thứ tự, cần unique, cần tra cứu key-value, hay cần FIFO/LIFO.',
+    example: null, hint: 'Nếu được hỏi sâu hơn, hãy nói rõ List, Set, Queue thuộc Collection còn Map là nhánh riêng.' },
+  { cat: 'java', diff: 'medium', q: 'Comparable và Comparator khác nhau thế nào?',
+    a: '- Comparable: định nghĩa thứ tự tự nhiên ngay trong class qua compareTo.\n- Comparator: định nghĩa luật so sánh bên ngoài class qua compare.',
+    explain: 'Comparator phù hợp khi cần nhiều kiểu sắp xếp khác nhau hoặc không sửa được class gốc.',
+    example: 'list.sort(Comparator.comparing(User::getName)\n    .thenComparing(User::getAge));',
+    hint: 'Một class chỉ có một natural order (Comparable), nhưng có thể có nhiều Comparator.' },
+  { cat: 'java', diff: 'easy', q: 'Exception là gì? Checked và Unchecked khác nhau ra sao?',
+    a: '- Exception là đối tượng biểu diễn tình huống bất thường trong quá trình chạy chương trình.\n- Checked exception: compiler bắt buộc xử lý hoặc khai báo throws.\n- Unchecked exception: kế thừa RuntimeException, thường liên quan lỗi logic hoặc dữ liệu không hợp lệ.',
+    explain: 'Ví dụ checked: IOException, SQLException. Ví dụ unchecked: NullPointerException, IllegalArgumentException.',
+    example: null, hint: 'Không nên catch Exception quá rộng nếu không có lý do rõ ràng.' },
+  { cat: 'java', diff: 'easy', q: 'Nếu finally có return thì điều gì xảy ra?',
+    a: 'return trong finally sẽ ghi đè giá trị return từ try hoặc catch.',
+    explain: 'Vì finally chạy trước khi method kết thúc. Thực tế nên tránh return trong finally vì gây khó đọc và dễ che lỗi.',
+    example: 'int f() {\n  try { return 1; }\n  finally { return 2; }\n}\n// Kết quả: 2',
+    hint: 'Quy tắc an toàn: không return trong finally.' },
+  { cat: 'java', diff: 'easy', q: 'Khác biệt giữa == và equals()?',
+    a: '- == so sánh cùng tham chiếu hay không.\n- equals() so sánh tính bằng nhau theo logic do class định nghĩa.',
+    explain: 'Với String, nên dùng equals() để so sánh nội dung. Nhiều class cần override cả equals và hashCode cùng lúc.',
+    example: null, hint: 'So sánh chuỗi an toàn: \"abc\".equals(s).' },
+  { cat: 'java', diff: 'medium', q: 'String, StringBuilder và StringBuffer khác nhau gì?',
+    a: '- String: immutable.\n- StringBuilder: mutable, không thread-safe, nhanh trong ngữ cảnh đơn luồng.\n- StringBuffer: mutable, thread-safe, chậm hơn do synchronized.',
+    explain: 'Nối chuỗi trong vòng lặp nên dùng StringBuilder để tránh tạo nhiều object rác.',
+    example: null, hint: 'Mặc định backend thường dùng StringBuilder; StringBuffer khi thực sự cần đồng bộ.' },
+  { cat: 'java', diff: 'medium', q: 'Generics là gì?',
+    a: 'Generics cho phép tham số hóa kiểu dữ liệu (List<T>, Map<K, V>) để kiểm tra kiểu ngay tại compile-time.',
+    explain: 'Giúp type-safe, giảm ép kiểu thủ công và lỗi ClassCastException lúc runtime.',
+    example: 'List<String> names = new ArrayList<>();\nnames.add(\"An\");\n// names.add(10); // lỗi compile-time',
+    hint: 'Hay gặp trong phỏng vấn: wildcard ? extends và ? super.' },
+  { cat: 'java', diff: 'easy', q: 'Java truyền tham số theo cách nào: pass by value hay pass by reference?',
+    a: 'Java chỉ có pass by value.',
+    explain: 'Với primitive, Java truyền bản sao của giá trị. Với object, Java truyền bản sao của tham chiếu, nên method có thể thay đổi trạng thái object nhưng không thể làm biến bên ngoài trỏ sang object khác chỉ bằng cách gán lại tham số.',
+    example: null, hint: 'Đây là câu hỏi rất hay dùng để kiểm tra hiểu biết nền tảng Java.' },
+  { cat: 'java', diff: 'easy', q: 'Stack memory và Heap memory khác nhau thế nào?',
+    a: '- Stack lưu biến cục bộ, tham số method và stack frame khi hàm được gọi.\n- Heap lưu object và dữ liệu có vòng đời dài hơn.',
+    explain: 'Stack thường quản lý tự động theo lời gọi hàm và nhanh hơn. Heap do Garbage Collector quản lý, linh hoạt hơn nhưng tốn chi phí quản lý hơn.',
+    example: null, hint: 'Biến tham chiếu có thể nằm ở stack nhưng object mà nó trỏ tới thường nằm ở heap.' },
+  { cat: 'java', diff: 'medium', q: 'equals() và hashCode() phải tuân theo nguyên tắc nào?',
+    a: '- Nếu override equals() thì nên override hashCode().\n- Hai object bằng nhau theo equals() phải có cùng hashCode().',
+    explain: 'Contract này rất quan trọng khi dùng HashMap, HashSet. Nếu vi phạm, object có thể bị tìm không ra hoặc sinh lỗi logic khó debug.',
+    example: null, hint: 'Câu này hay đi cùng câu hỏi về HashMap và HashSet.' },
+  { cat: 'java', diff: 'medium', q: 'HashMap hoạt động như thế nào?',
+    a: 'HashMap dùng hashCode() của key để xác định bucket, sau đó dùng equals() để tìm đúng phần tử trong bucket đó.',
+    explain: 'Khi có va chạm hash, nhiều key có thể nằm cùng bucket. Các phiên bản Java hiện đại có thể dùng linked list hoặc tree trong bucket để tối ưu hiệu năng khi va chạm nhiều.',
+    example: null, hint: 'Trả lời đủ 3 ý: hashCode, bucket, equals là đã khá ổn cho mức intern.' },
+  { cat: 'java', diff: 'easy', q: 'Wrapper class và autoboxing/unboxing là gì?',
+    a: '- Wrapper class là lớp bao của primitive như Integer, Long, Double, Boolean.\n- Autoboxing là tự động chuyển primitive sang wrapper.\n- Unboxing là chuyển wrapper về primitive.',
+    explain: 'Wrapper class cần thiết khi làm việc với Generics, Collections và khi cần giá trị null.',
+    example: 'Integer x = 10;   // autoboxing\nint y = x;       // unboxing',
+    hint: 'Lưu ý NPE có thể xảy ra khi unboxing một wrapper đang null.' },
+  { cat: 'java', diff: 'easy', q: 'final, finally và finalize khác nhau thế nào?',
+    a: '- final là keyword dùng cho biến, method, class.\n- finally là block thường được chạy sau try/catch.\n- finalize() là method cũ liên quan GC và không nên dùng.',
+    explain: 'finalize() đã bị deprecated trong Java hiện đại vì không đáng tin cậy và gây vấn đề hiệu năng.',
+    example: null, hint: 'Nếu được hỏi sâu, hãy nói finalize không phù hợp để giải phóng tài nguyên.' },
+  { cat: 'java', diff: 'medium', q: 'Functional Interface và Lambda Expression là gì?',
+    a: '- Functional interface là interface chỉ có một abstract method.\n- Lambda expression là cú pháp ngắn gọn để triển khai functional interface.',
+    explain: 'Ví dụ phổ biến: Runnable, Comparator, Predicate, Function, Consumer. Lambda giúp code ngắn và rõ hơn anonymous class trong nhiều trường hợp.',
+    example: 'Comparator<String> cmp = (a, b) -> a.length() - b.length();',
+    hint: 'Từ khóa hay gặp: @FunctionalInterface.' },
+  { cat: 'java', diff: 'medium', q: 'Stream API là gì? Khi nào nên dùng?',
+    a: 'Stream API cho phép xử lý tập dữ liệu theo kiểu khai báo như filter, map, sorted, collect.',
+    explain: 'Stream phù hợp khi cần pipeline xử lý dữ liệu rõ ràng, ít mutable state. Không nên lạm dụng stream cho logic đơn giản hơn khi viết vòng lặp sẽ dễ đọc hơn.',
+    example: 'List<String> result = names.stream()\n    .filter(name -> name.startsWith(\"A\"))\n    .sorted()\n    .toList();',
+    hint: 'Phân biệt stream là cách xử lý dữ liệu, không phải cấu trúc dữ liệu lưu trữ.' },
+
+  // DS & Thuật Toán
+  { cat: 'ds', diff: 'easy', q: 'Mảng (Array) và Linked List khác nhau thế nào?',
+    a: '- Array: truy cập theo index O(1), kích thước cố định sau khi tạo.\n- Linked List: chèn hoặc xóa thuận lợi hơn (khi đã có node), nhưng truy cập theo index O(n).',
+    explain: 'Array thường cache-friendly hơn. Linked List phù hợp khi thao tác chèn xóa nhiều và không cần random access.',
+    example: null, hint: 'Nêu Big-O cơ bản là điểm cộng lớn.' },
+  { cat: 'ds', diff: 'easy', q: 'Stack (LIFO) và Queue (FIFO) là gì?',
+    a: '- Stack: vào sau ra trước, thao tác push/pop/peek.\n- Queue: vào trước ra trước, thao tác offer/poll/peek.',
+    explain: 'Deque có thể đóng vai trò cả stack và queue tùy cách dùng.',
+    example: null, hint: 'Trong Java ưu tiên ArrayDeque cho stack/queue đơn giản.' },
+  { cat: 'ds', diff: 'easy', q: 'HashMap và HashSet khác nhau thế nào?',
+    a: '- HashMap lưu cặp key-value.\n- HashSet chỉ lưu phần tử unique (về bản chất thường dựa trên HashMap).',
+    explain: 'HashMap cho phép một key null và nhiều value null. HashSet không cho phần tử trùng theo equals và hashCode.',
+    example: null, hint: 'Nếu chỉ cần kiểm tra tồn tại phần tử thì dùng HashSet.' },
+  { cat: 'ds', diff: 'medium', q: 'So sánh Bubble Sort, Selection Sort, Insertion Sort',
+    a: '- Bubble Sort: đổi chỗ cặp liền kề khi sai thứ tự.\n- Selection Sort: mỗi vòng chọn phần tử nhỏ nhất hoặc lớn nhất đặt vào vị trí đúng.\n- Insertion Sort: chèn từng phần tử vào đoạn đã sắp xếp.',
+    explain: 'Cả ba đều O(n^2) ở trung bình hoặc xấu, nhưng Insertion Sort thường tốt khi dữ liệu gần như đã có thứ tự.',
+    example: null, hint: 'Phỏng vấn intern thường hỏi để kiểm tra tư duy độ phức tạp.' },
+  { cat: 'ds', diff: 'medium', q: 'Khi nào nên dùng Binary Search?',
+    a: '- Dùng khi dữ liệu đã được sắp xếp.\n- Mỗi bước chia đôi không gian tìm kiếm nên độ phức tạp O(log n).',
+    explain: 'Tính mid an toàn bằng công thức: left + (right - left) / 2 để tránh tràn số nguyên.',
+    example: null, hint: 'Nếu dữ liệu chưa sort thì binary search không áp dụng trực tiếp.' },
+  { cat: 'ds', diff: 'easy', q: 'Cây nhị phân là gì?',
+    a: 'Cây nhị phân là cây trong đó mỗi node có tối đa hai node con: trái và phải.',
+    explain: 'Không phải cây nhị phân nào cũng là BST. BST có thêm ràng buộc: node trái nhỏ hơn node hiện tại, node phải lớn hơn node hiện tại.',
+    example: null, hint: 'Nên nói rõ khác biệt giữa Binary Tree và Binary Search Tree.' },
+  { cat: 'ds', diff: 'medium', q: 'DFS và BFS khác nhau thế nào?',
+    a: '- DFS đi sâu trước, thường dùng stack hoặc đệ quy.\n- BFS đi theo từng lớp, thường dùng queue.',
+    explain: 'BFS thường dùng để tìm đường đi ngắn nhất trong đồ thị không trọng số.',
+    example: null, hint: 'Phần cấu trúc dữ liệu đi kèm stack hoặc queue là điểm cần nêu.' },
+  { cat: 'ds', diff: 'hard', q: 'Đệ quy và vòng lặp: ưu nhược điểm?',
+    a: '- Đệ quy diễn đạt bài toán chia để trị rất tự nhiên nhưng tốn stack frame.\n- Vòng lặp thường tiết kiệm bộ nhớ hơn và tránh StackOverflow khi dữ liệu lớn.',
+    explain: 'Nếu bài toán có thể chuyển sang iterative mà vẫn rõ ràng thì nên ưu tiên để tối ưu tài nguyên.',
+    example: null, hint: 'Nhớ nêu base case khi giải thích đệ quy.' },
+
+  // SDLC
+  { cat: 'sdlc', diff: 'easy', q: 'Mô hình Waterfall là gì?',
+    a: 'Waterfall là mô hình phát triển tuần tự theo giai đoạn: yêu cầu -> thiết kế -> triển khai -> kiểm thử -> bàn giao -> bảo trì.',
+    explain: 'Phù hợp khi yêu cầu ổn định, ít thay đổi. Nhược điểm lớn là phản hồi người dùng đến muộn.',
+    example: null, hint: 'Nêu thêm rủi ro khi đổi yêu cầu muộn là đủ ý.' },
+  { cat: 'sdlc', diff: 'easy', q: 'V-Model là gì?',
+    a: 'V-Model mở rộng từ Waterfall, nhấn mạnh việc mỗi pha phát triển có pha kiểm thử tương ứng.',
+    explain: 'Ví dụ: yêu cầu hệ thống <-> kiểm thử chấp nhận; thiết kế chi tiết <-> unit test.',
+    example: null, hint: 'Điểm mạnh của V-Model là kế hoạch test được chuẩn bị sớm.' },
+  { cat: 'sdlc', diff: 'medium', q: 'Mô hình Spiral phù hợp khi nào?',
+    a: 'Spiral phát triển theo vòng lặp, mỗi vòng tập trung nhận diện và giảm rủi ro trước khi đi tiếp.',
+    explain: 'Phù hợp dự án lớn, phức tạp, nhiều bất định kỹ thuật hoặc nghiệp vụ.',
+    example: null, hint: 'Từ khóa quan trọng của Spiral là risk management.' },
+  { cat: 'sdlc', diff: 'medium', q: 'Iterative và Incremental khác nhau như thế nào?',
+    a: '- Iterative: cải tiến lặp đi lặp lại trên cùng tính năng.\n- Incremental: chia sản phẩm thành nhiều phần và bàn giao dần từng phần.',
+    explain: 'Thực tế nhiều dự án kết hợp cả hai: vừa bàn giao từng phần vừa cải tiến liên tục.',
+    example: null, hint: 'Nêu ví dụ phát hành theo sprint sẽ dễ ghi điểm.' },
+  { cat: 'sdlc', diff: 'easy', q: 'Prototype model là gì?',
+    a: 'Prototype tạo phiên bản mẫu sớm để làm rõ yêu cầu trước khi xây dựng hệ thống hoàn chỉnh.',
+    explain: 'Giúp giảm hiểu sai giữa team kỹ thuật và người dùng, nhưng cần quản lý kỳ vọng để tránh nhầm prototype là sản phẩm cuối.',
+    example: null, hint: 'Nhấn mạnh mục tiêu chính: làm rõ requirement.' },
+  { cat: 'sdlc', diff: 'medium', q: 'Agile và Scrum là gì?',
+    a: '- Agile là tư duy phát triển linh hoạt, giao hàng sớm và nhận phản hồi liên tục.\n- Scrum là framework phổ biến trong Agile với sprint ngắn, role rõ ràng và các ceremony chuẩn.',
+    explain: 'Role chính trong Scrum: Product Owner, Scrum Master, Development Team.',
+    example: null, hint: 'Intern nên nói được ít nhất Planning, Daily, Review, Retrospective.' },
+  { cat: 'sdlc', diff: 'easy', q: 'Kanban là gì?',
+    a: 'Kanban là phương pháp quản lý công việc bằng bảng trạng thái (To do, In progress, Done) để tối ưu flow.',
+    explain: 'Nguyên tắc quan trọng: giới hạn WIP (Work In Progress) để tránh nghẽn.',
+    example: null, hint: 'Kanban linh hoạt hơn sprint cố định trong nhiều ngữ cảnh vận hành.' },
+  { cat: 'sdlc', diff: 'medium', q: 'CI/CD pipeline là gì?',
+    a: '- CI (Continuous Integration): tự động build và test khi code được merge.\n- CD (Continuous Delivery hoặc Deployment): tự động hóa phát hành lên môi trường.',
+    explain: 'CI/CD giúp giảm lỗi thủ công, rút ngắn thời gian release và phát hiện lỗi sớm.',
+    example: null, hint: 'Nêu được ví dụ tool như GitHub Actions, GitLab CI, Jenkins là đủ.' },
+
+  // SQL & DB
+  { cat: 'sql', diff: 'easy', q: 'Phân biệt INNER JOIN, LEFT JOIN, FULL JOIN?',
+    a: '- INNER JOIN: chỉ lấy bản ghi khớp ở cả hai bảng.\n- LEFT JOIN: lấy toàn bộ bảng trái và phần khớp của bảng phải.\n- FULL JOIN: lấy tất cả bản ghi của cả hai bảng, không khớp sẽ là NULL.',
+    explain: 'Trong thực tế báo cáo dữ liệu, LEFT JOIN rất hay dùng để tìm bản ghi thiếu quan hệ ở bảng phải.',
+    example: null, hint: 'Nếu DB không hỗ trợ FULL JOIN có thể mô phỏng bằng UNION.' },
+  { cat: 'sql', diff: 'easy', q: 'Primary Key và Foreign Key khác nhau gì?',
+    a: '- Primary Key (PK): định danh duy nhất một bản ghi trong bảng.\n- Foreign Key (FK): tham chiếu tới PK hoặc unique key của bảng khác để đảm bảo toàn vẹn quan hệ.',
+    explain: 'Một bảng có một PK (có thể là khóa tổng hợp nhiều cột), nhưng có thể có nhiều FK.',
+    example: null, hint: 'PK không được NULL; FK có thể NULL tùy thiết kế nghiệp vụ.' },
+  { cat: 'sql', diff: 'easy', q: 'WHERE khác HAVING như thế nào?',
+    a: '- WHERE lọc dữ liệu trước khi GROUP BY.\n- HAVING lọc sau khi đã GROUP BY.',
+    explain: 'Hàm tổng hợp thường dùng trong HAVING. WHERE vẫn có thể lọc theo subquery có aggregate.',
+    example: null, hint: 'Nhớ thứ tự logic: FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY.' },
+  { cat: 'sql', diff: 'medium', q: 'Index trong database là gì?',
+    a: 'Index là cấu trúc dữ liệu phụ trợ (thường B-Tree) giúp tăng tốc truy vấn đọc theo điều kiện hoặc sắp xếp.',
+    explain: 'Trade-off: index cải thiện SELECT nhưng làm INSERT, UPDATE, DELETE chậm hơn và tốn dung lượng lưu trữ.',
+    example: null, hint: 'Chỉ tạo index cho cột hay lọc, join hoặc sort thường xuyên.' },
+  { cat: 'sql', diff: 'medium', q: 'Transaction và ACID là gì?',
+    a: '- Transaction là một nhóm thao tác SQL phải thành công hoặc thất bại cùng nhau.\n- Atomicity: tất cả cùng thành công hoặc cùng rollback.\n- Consistency: dữ liệu vẫn hợp lệ trước và sau transaction.\n- Isolation: các transaction đồng thời không làm sai lệch nhau ngoài mức cô lập cho phép.\n- Durability: khi đã commit thì dữ liệu phải được đảm bảo bền vững.',
+    explain: 'Ví dụ chuyển tiền ngân hàng: trừ tiền tài khoản A và cộng vào B phải là một transaction duy nhất.',
+    example: null, hint: 'Isolation liên quan trực tiếp đến dirty read, non-repeatable read, phantom read.' },
+  { cat: 'sql', diff: 'medium', q: 'Viết truy vấn lấy top 3 theo từng nhóm như thế nào?',
+    a: 'Dùng window function: ROW_NUMBER() OVER (PARTITION BY group_col ORDER BY score DESC) rồi lọc rank <= 3.',
+    explain: 'Cách này rõ ràng, mở rộng tốt và thường tối ưu hơn so với subquery lồng phức tạp.',
+    example: 'SELECT *\nFROM (\n  SELECT s.*, ROW_NUMBER() OVER (\n    PARTITION BY class_id ORDER BY score DESC\n  ) AS rn\n  FROM student_score s\n) t\nWHERE t.rn <= 3;',
+    hint: 'Phân biệt ROW_NUMBER, RANK, DENSE_RANK để trả lời sâu hơn.' },
+  { cat: 'sql', diff: 'hard', q: 'SQL và NoSQL khác nhau như thế nào?',
+    a: '- SQL: dữ liệu quan hệ, schema chặt, hỗ trợ join và transaction mạnh.\n- NoSQL: linh hoạt schema, dễ scale ngang, phù hợp dữ liệu lớn hoặc thay đổi cấu trúc thường xuyên.',
+    explain: 'Không có lựa chọn nào tuyệt đối tốt. Chọn theo bài toán: tính nhất quán, kiểu truy vấn, tốc độ thay đổi dữ liệu, khả năng scale.',
+    example: null, hint: 'Intern nên trả lời theo use-case thay vì tranh luận công nghệ.' },
+  { cat: 'sql', diff: 'easy', q: 'DELETE, TRUNCATE, DROP khác nhau gì?',
+    a: '- DELETE: xóa từng dòng (có thể kèm WHERE), thường có thể rollback trong transaction.\n- TRUNCATE: xóa toàn bộ dữ liệu bảng nhanh hơn DELETE, không dùng WHERE.\n- DROP: xóa hẳn object (bảng hoặc cấu trúc).',
+    explain: 'Khi DROP thì cả schema object biến mất; dùng rất cẩn thận ở môi trường production.',
+    example: null, hint: 'TRUNCATE có reset identity hay không tùy hệ quản trị CSDL.' },
+  { cat: 'sql', diff: 'medium', q: 'Normalization là gì? 1NF, 2NF, 3NF ở mức cơ bản?',
+    a: 'Normalization là quá trình tổ chức dữ liệu để giảm dư thừa và tăng tính nhất quán.',
+    explain: '1NF: cột có giá trị nguyên tử, không lặp nhóm dữ liệu. 2NF: đạt 1NF và mọi cột không khóa phải phụ thuộc đầy đủ vào toàn bộ khóa chính. 3NF: đạt 2NF và loại bỏ phụ thuộc bắc cầu giữa các cột không khóa.',
+    example: null, hint: 'Intern không cần đi quá sâu, chỉ cần nêu mục tiêu giảm dư thừa và tránh anomaly.' },
+  { cat: 'sql', diff: 'easy', q: 'UNION và UNION ALL khác nhau thế nào?',
+    a: '- UNION gộp kết quả và loại bỏ bản ghi trùng.\n- UNION ALL gộp kết quả và giữ nguyên bản ghi trùng.',
+    explain: 'UNION ALL thường nhanh hơn vì không cần bước loại bỏ trùng lặp.',
+    example: null, hint: 'Nếu đề không yêu cầu bỏ trùng, ưu tiên UNION ALL để tránh chi phí không cần thiết.' },
+  { cat: 'sql', diff: 'medium', q: 'Subquery và JOIN khác nhau thế nào? Khi nào thường dùng JOIN?',
+    a: '- JOIN kết hợp dữ liệu từ nhiều bảng trong một truy vấn.\n- Subquery là truy vấn lồng trong truy vấn khác.',
+    explain: 'JOIN thường rõ ràng và dễ tối ưu hơn trong các bài toán truy vấn quan hệ giữa nhiều bảng. Subquery hữu ích khi cần tách từng bước hoặc biểu diễn logic đặc biệt như EXISTS, IN, scalar subquery.',
+    example: null, hint: 'Nếu phỏng vấn hỏi tối ưu, JOIN thường là hướng nên nghĩ đầu tiên.' },
+
+  // Spring/Misc
+  { cat: 'misc', diff: 'easy', q: 'REST API: ý nghĩa các HTTP method phổ biến?',
+    a: 'GET để đọc dữ liệu, POST để tạo mới, PUT để cập nhật toàn bộ, PATCH để cập nhật một phần, DELETE để xóa.',
+    explain: 'GET, PUT, DELETE có tính idempotent theo chuẩn HTTP; POST thường không idempotent.',
+    example: null, hint: 'Nêu thêm status code thường dùng: 200, 201, 204, 400, 404, 500.' },
+  { cat: 'misc', diff: 'easy', q: 'Mô hình MVC là gì?',
+    a: '- Model: dữ liệu và nghiệp vụ.\n- View: giao diện hiển thị.\n- Controller: nhận request, điều phối model và view hoặc response.',
+    explain: 'Trong Spring Boot REST, Controller thường trả JSON thay vì trả view template.',
+    example: null, hint: 'Mục tiêu chính của MVC là tách trách nhiệm rõ ràng.' },
+  { cat: 'misc', diff: 'medium', q: 'JPA và Hibernate quan hệ thế nào?',
+    a: '- JPA là đặc tả (specification) chuẩn cho ORM trong Java.\n- Hibernate là một implementation phổ biến của JPA.',
+    explain: 'Khi dùng Spring Data JPA, bạn chủ yếu code theo JPA API nhưng runtime thường do Hibernate thực thi.',
+    example: null, hint: 'Nói ngắn gọn: JPA là interface chuẩn, Hibernate là engine thực thi.' },
+  { cat: 'misc', diff: 'medium', q: 'DTO pattern dùng để làm gì?',
+    a: 'DTO (Data Transfer Object) là object trung gian để trao đổi dữ liệu giữa các layer hoặc qua API.',
+    explain: 'DTO giúp ẩn field nhạy cảm, tránh expose entity trực tiếp, và kiểm soát format dữ liệu trả về.',
+    example: null, hint: 'Kết hợp DTO và validation giúp API an toàn, rõ ràng hơn.' },
+  { cat: 'misc', diff: 'easy', q: 'Spring Framework và Spring Boot khác nhau thế nào?',
+    a: '- Spring Framework là nền tảng lớn cung cấp IoC, DI, MVC, Data, Security...\n- Spring Boot giúp cấu hình nhanh hơn, ít boilerplate hơn và dễ chạy ứng dụng độc lập.',
+    explain: 'Spring Boot xây trên Spring Framework, thêm auto-configuration, starter dependency và embedded server để tăng tốc phát triển.',
+    example: null, hint: 'Trả lời ngắn gọn: Spring là framework, Spring Boot là cách dùng Spring nhanh và ít cấu hình hơn.' },
+  { cat: 'misc', diff: 'easy', q: 'IoC và DI là gì?',
+    a: '- IoC (Inversion of Control) là việc framework quản lý vòng đời và việc tạo object thay cho lập trình viên tự new mọi thứ.\n- DI (Dependency Injection) là cách cung cấp dependency từ bên ngoài vào object.',
+    explain: 'DI là một cách triển khai IoC. Nhờ đó code giảm coupling, dễ test và dễ thay thế implementation.',
+    example: null, hint: 'Nếu được hỏi sâu hơn, hãy nhấn mạnh constructor injection.' },
+  { cat: 'misc', diff: 'easy', q: 'Spring Bean là gì?',
+    a: 'Spring Bean là object được Spring container quản lý vòng đời và dependency.',
+    explain: 'Bean thường được tạo thông qua annotation như @Component, @Service, @Repository, @Controller hoặc qua @Bean trong class @Configuration.',
+    example: null, hint: 'Từ khóa cần nhớ: container quản lý bean.' },
+  { cat: 'misc', diff: 'medium', q: '@SpringBootApplication gồm những gì?',
+    a: '@SpringBootApplication là annotation tổng hợp thường bao gồm @Configuration, @EnableAutoConfiguration và @ComponentScan.',
+    explain: 'Nó giúp vừa khai báo class cấu hình, vừa bật auto-configuration, vừa quét bean trong package hiện tại và các package con.',
+    example: null, hint: 'Đây là một câu Spring Boot rất hay gặp.' },
+  { cat: 'misc', diff: 'easy', q: 'Starter dependency trong Spring Boot là gì?',
+    a: 'Starter là gói dependency gom sẵn các thư viện thường dùng cho một mục đích cụ thể như web, data-jpa, validation, security.',
+    explain: 'Ví dụ: spring-boot-starter-web thường kéo theo các dependency cần thiết để xây REST API hoặc ứng dụng web, như Spring MVC, Jackson và embedded server.',
+    example: null, hint: 'Ý chính: giảm công sức chọn và phối dependency thủ công.' },
+  { cat: 'misc', diff: 'easy', q: '@Component, @Service, @Repository khác nhau thế nào?',
+    a: 'Cả ba đều là stereotype annotation để Spring quét và tạo bean.',
+    explain: '@Component là tổng quát. @Service thường dùng cho tầng nghiệp vụ. @Repository dùng cho tầng truy cập dữ liệu và có ý nghĩa ngữ cảnh rõ hơn; với một số công nghệ còn hỗ trợ dịch exception về DataAccessException.',
+    example: null, hint: 'Về cơ chế quét bean thì gần nhau; khác biệt chính là ý nghĩa và mục đích sử dụng.' },
+  { cat: 'misc', diff: 'easy', q: '@Controller và @RestController khác nhau gì?',
+    a: '- @Controller thường dùng cho MVC trả về view.\n- @RestController là @Controller + @ResponseBody, thường trả JSON trực tiếp.',
+    explain: 'Trong backend API thuần với Spring Boot, @RestController là lựa chọn phổ biến hơn.',
+    example: null, hint: 'Nếu method trả object JSON trực tiếp, thường là @RestController.' },
+  { cat: 'misc', diff: 'easy', q: '@RequestParam, @PathVariable và @RequestBody dùng khi nào?',
+    a: '- @RequestParam lấy giá trị từ query parameter.\n- @PathVariable lấy giá trị từ URL path.\n- @RequestBody map dữ liệu từ body request vào object.',
+    explain: 'Ví dụ: /users/10 dùng @PathVariable cho 10; /users?page=1 dùng @RequestParam; POST JSON dùng @RequestBody.',
+    example: null, hint: 'Câu này rất hay đi kèm thiết kế REST API.' },
+  { cat: 'misc', diff: 'medium', q: 'Nên dùng @Autowired field injection hay constructor injection?',
+    a: 'Nên ưu tiên constructor injection.',
+    explain: 'Constructor injection giúp dependency rõ ràng, dễ test, hỗ trợ immutable field và tránh object ở trạng thái thiếu dependency.',
+    example: null, hint: 'Field injection ngắn hơn nhưng kém rõ ràng và khó test hơn.' },
+  { cat: 'misc', diff: 'medium', q: 'Bean scope trong Spring là gì?',
+    a: 'Bean scope xác định phạm vi sống của bean như singleton, prototype, request, session...',
+    explain: 'Scope mặc định là singleton. Trong ứng dụng web, request và session scope thường dùng cho bean gắn với vòng đời HTTP.',
+    example: null, hint: 'Nếu bị hỏi nhanh, chỉ cần nhớ singleton là mặc định.' },
+  { cat: 'misc', diff: 'medium', q: 'Spring Profiles dùng để làm gì?',
+    a: 'Profiles cho phép kích hoạt cấu hình khác nhau theo môi trường như dev, test, prod.',
+    explain: 'Nhờ profiles, bạn có thể dùng datasource, logging hoặc feature flag khác nhau cho từng môi trường mà không sửa code.',
+    example: null, hint: 'Hay gặp file application-dev.properties hoặc application-prod.yml.' },
+  { cat: 'misc', diff: 'medium', q: '@Transactional dùng để làm gì?',
+    a: '@Transactional đánh dấu method hoặc class cần chạy trong transaction.',
+    explain: 'Nếu có lỗi phù hợp xảy ra, transaction có thể rollback để đảm bảo tính nhất quán dữ liệu. Trong Spring, mặc định rollback cho RuntimeException và Error.',
+    example: null, hint: 'Đây là câu rất hay gặp khi phỏng vấn Spring Data JPA.' },
+  { cat: 'misc', diff: 'medium', q: '@Valid dùng để làm gì trong Spring Boot?',
+    a: '@Valid kích hoạt cơ chế validation cho object request dựa trên annotation như @NotNull, @NotBlank, @Email, @Size.',
+    explain: 'Nó giúp chặn dữ liệu đầu vào không hợp lệ ngay từ tầng API trước khi xuống business logic hoặc database.',
+    example: null, hint: 'Thường đi kèm BindingResult hoặc global exception handler.' },
+  { cat: 'misc', diff: 'medium', q: 'FetchType.LAZY và FetchType.EAGER khác nhau thế nào?',
+    a: '- LAZY: chỉ tải dữ liệu liên quan khi thực sự truy cập.\n- EAGER: tải dữ liệu liên quan ngay khi lấy entity chính.',
+    explain: 'Lạm dụng EAGER có thể kéo theo query nặng và khó kiểm soát. Thực tế nhiều dự án ưu tiên LAZY và chủ động thiết kế truy vấn rõ ràng.',
+    example: null, hint: 'Câu này thường đi kèm vấn đề N+1 query.' },
+  { cat: 'misc', diff: 'hard', q: 'N+1 query problem là gì?',
+    a: 'N+1 là tình huống hệ thống chạy 1 query lấy danh sách chính, sau đó chạy thêm N query để lấy dữ liệu liên quan cho từng phần tử.',
+    explain: 'Vấn đề này làm hiệu năng giảm mạnh. Các cách xử lý thường gặp là fetch join, entity graph, projection hoặc thiết kế truy vấn phù hợp.',
+    example: null, hint: 'Nếu thấy log SQL bắn rất nhiều query lặp, hãy nghĩ tới N+1.' },
+  { cat: 'misc', diff: 'easy', q: 'Cách debug lỗi NullPointerException (NPE) hiệu quả?',
+    a: '- Đọc stack trace để xác định đúng file và dòng gây lỗi.\n- Kiểm tra object nào đang null tại dòng đó.\n- Truy ngược luồng dữ liệu để tìm nguyên nhân gốc.\n- Bổ sung validate hoặc null-check, hoặc thiết kế lại luồng khởi tạo.',
+    explain: 'Không nên chỉ thêm if (x != null) ở mọi nơi. Cần xử lý đúng nguyên nhân để tránh lỗi lặp lại.',
+    example: null, hint: 'Dùng debugger và breakpoint để quan sát trạng thái biến theo từng bước.' },
+  { cat: 'misc', diff: 'hard', q: 'Monolithic và Microservices khác nhau thế nào?',
+    a: '- Monolithic: toàn bộ tính năng trong một codebase hoặc deployment.\n- Microservices: chia thành nhiều service nhỏ, độc lập deploy theo domain.',
+    explain: 'Monolith đơn giản hơn cho team nhỏ. Microservices tăng khả năng scale độc lập nhưng phức tạp hơn về vận hành, giám sát, giao tiếp mạng và dữ liệu phân tán.',
+    example: null, hint: 'Intern nên nêu trade-off thay vì khẳng định mô hình nào luôn tốt hơn.' },
+  { cat: 'misc', diff: 'easy', q: 'Khi chưa rõ requirement thì nên làm gì?',
+    a: '- Xác nhận lại với BA, PO, mentor ngay.\n- Viết lại yêu cầu bằng ngôn ngữ của bạn để chốt hiểu đúng.\n- Chỉ bắt đầu code khi scope và tiêu chí chấp nhận đã rõ.',
+    explain: 'Hỏi sớm giúp giảm rework và thể hiện tinh thần làm việc chuyên nghiệp.',
+    example: null, hint: 'Một câu hỏi rõ ràng sớm luôn rẻ hơn một bug ở production.' },
+  { cat: 'misc', diff: 'medium', q: 'Caching là gì?',
+    a: 'Caching là lưu dữ liệu truy cập thường xuyên ở lớp nhanh hơn (RAM hoặc Redis) để giảm tải DB và giảm độ trễ.',
+    explain: 'Chiến lược phổ biến: cache-aside. Điểm khó nhất là đồng bộ và invalidation khi dữ liệu gốc thay đổi.',
+    example: null, hint: 'Không cache dữ liệu nhạy cảm nếu chưa có cơ chế bảo mật và hết hạn phù hợp.' },
+  { cat: 'misc', diff: 'hard', q: 'Concurrency trong Java là gì? Rủi ro chính?',
+    a: 'Concurrency là xử lý nhiều tác vụ chồng lấp theo thời gian bằng đa luồng hoặc bất đồng bộ.',
+    explain: 'Rủi ro thường gặp: race condition, deadlock, starvation. Công cụ phổ biến: synchronized, Lock, volatile, java.util.concurrent, thread pool.',
+    example: null, hint: 'Ưu tiên immutable object và cấu trúc thread-safe khi có thể.' },
+  { cat: 'misc', diff: 'easy', q: 'Mô hình trả lời STAR khi phỏng vấn là gì?',
+    a: 'STAR gồm: Situation (bối cảnh), Task (nhiệm vụ), Action (hành động), Result (kết quả).',
+    explain: 'Dùng STAR để trả lời câu hỏi hành vi giúp câu trả lời có cấu trúc, thể hiện rõ đóng góp và tác động.',
+    example: null, hint: 'Nên đưa kết quả có số liệu cụ thể: giảm bao nhiêu lỗi, tiết kiệm bao nhiêu thời gian.' }
+];
+
+let activeCat = 'all';
+let openCards = new Set();
+let searchQuery = '';
+
+function renderTabs() {
+    const tabsCont = document.getElementById('tabs');
+    tabsCont.innerHTML = cats.map(c => {
+        const count = c.id === 'all' ? questions.length : questions.filter(q => q.cat === c.id).length;
+        const isActive = activeCat === c.id ? 'active' : '';
+        return `<button class="tab ${isActive}" onclick="setTab('${c.id}')">${c.label} (${count})</button>`;
+    }).join('');
+}
+
+function setTab(id) {
+    activeCat = id;
+    openCards.clear();
+    renderTabs();
+    renderList();
+}
+
+function renderList() {
+    const list = document.getElementById('list');
+    
+    // Filter
+    const filtered = questions.filter(q => {
+        const passCat = (activeCat === 'all' || q.cat === activeCat);
+        const st = searchQuery.toLowerCase();
+        const passSearch = st === '' || [q.q, q.a, q.explain, q.hint, q.example].some(v => v && v.toLowerCase().includes(st));
+        return passCat && passSearch;
+    });
+
+    document.getElementById('s-total').textContent = questions.length;
+    document.getElementById('s-shown').textContent = filtered.length;
+    document.getElementById('s-open').textContent = openCards.size;
+
+    if (filtered.length === 0) {
+        list.innerHTML = '<div style="text-align:center; padding: 3rem; color: #64748b;">Không tìm thấy câu hỏi phù hợp với tùy chọn của bạn.</div>';
+        return;
+    }
+
+    list.innerHTML = filtered.map((q, i) => {
+        const idx = questions.indexOf(q); // unique global identity
+        const isOpen = openCards.has(idx);
+        
+        let diffClass = { easy: 'diff-easy', medium: 'diff-medium', hard: 'diff-hard' }[q.diff];
+        let diffLabel = { easy: 'Cơ bản', medium: 'Trung bình', hard: 'Chuyên sâu' }[q.diff];
+        let catLabel = cats.find(c => c.id === q.cat)?.label || q.cat;
+
+        let exampleHtml = q.example ? `
+            <div class="ans-section">
+                <div class="ans-title example">💻 Code Ví Dụ Hiện Thực</div>
+                <pre><code>${q.example.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>
+            </div>` : '';
+
+        return `
+        <div class="q-card ${isOpen ? 'open' : ''}">
+            <div class="q-header" onclick="toggleCard(${idx})">
+                <div class="q-num">${(i + 1).toString().padStart(2, '0')}</div>
+                <div class="q-text">${q.q}</div>
+                <div class="q-arrow">▼</div>
+            </div>
+            ${isOpen ? `
+            <div class="q-body">
+                <div class="ans-section">
+                    <div class="ans-title core">📝 Trả lời Trọng Tâm</div>
+                    <div>${q.a.replace(/\\n/g, '<br><br>')}</div>
+                </div>
+
+                ${q.explain ? `
+                <div class="ans-section">
+                    <div class="ans-title explain">📖 Phân Tích Sâu</div>
+                    <div>${q.explain.replace(/\\n/g, '<br>')}</div>
+                </div>` : ''}
+
+                ${exampleHtml}
+                
+                ${q.hint ? `<div class="hint"><p>💡 <strong>Note / Gợi ý phòng thi:</strong> ${q.hint}</p></div>` : ''}
+
+                <div class="tags">
+                    <span class="tag ${diffClass}">${diffLabel}</span>
+                    <span class="tag cat-tag">${catLabel.replace(/[^A-Za-zưáàảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵđ ]/g,'').trim()}</span>
+                </div>
+            </div>
+            ` : ''}
+        </div>
+        `;
+    }).join('');
+}
+
+function toggleCard(globalIdx) {
+    if (openCards.has(globalIdx)) openCards.delete(globalIdx);
+    else openCards.add(globalIdx);
+    renderList();
+}
+
+document.getElementById('search').addEventListener('input', (e) => {
+    searchQuery = e.target.value;
+    renderList();
+});
+
+// Init
+renderTabs();
+renderList();
+</script>
+
+</body>
+</html>
+
