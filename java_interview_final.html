@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Intern Interview Quiz</title>
+    <title>Java Intern Interview Guide</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -34,6 +34,24 @@
         .header { padding: 1.5rem 0 2rem; text-align: center; }
         .header h2 { font-size: 28px; font-weight: 700; color: var(--color-primary-dark); }
         .header p { font-size: 15px; color: var(--color-text-secondary); margin-top: 8px; max-width: 760px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+        .header-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+        .header-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: 1px solid var(--color-border-secondary);
+            background: var(--color-background-primary);
+            color: var(--color-text-primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .header-link:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08); }
+        .header-link.primary { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
 
         .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 2rem; }
         .stat-card {
@@ -156,6 +174,7 @@
             body { padding: 0.875rem; }
             .header h2 { font-size: 24px; line-height: 1.25; }
             .header p { font-size: 14px; }
+            .header-actions { margin-top: 16px; }
             .stats { gap: 10px; margin-bottom: 1.5rem; }
             .stat-card { padding: 14px 12px; }
             .stat-num { font-size: 22px; }
@@ -205,6 +224,10 @@
     <div class="header">
         <h2>Bộ Câu Hỏi Phỏng Vấn Java Intern</h2>
         <p>Phiên bản đã chuẩn hóa và mở rộng thêm các câu Java Core, SQL, Spring Boot hay gặp cho vị trí Intern Java Developer.</p>
+        <div class="header-actions">
+            <a class="header-link primary" href="java_intern_interview_quiz.html">Làm Trắc Nghiệm</a>
+            <a class="header-link" href="index.html">Trang Chọn Chế Độ</a>
+        </div>
     </div>
 
     <div class="stats">

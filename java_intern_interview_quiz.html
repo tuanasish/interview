@@ -1,318 +1,538 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Intern Mock Quiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f5efe6;
+            --card: #fffdf8;
+            --line: #e6d8c5;
+            --text: #1f2937;
+            --soft: #5b6472;
+            --primary: #0f766e;
+            --primary-soft: #dff5f2;
+            --success: #166534;
+            --success-soft: #dcfce7;
+            --danger: #b91c1c;
+            --danger-soft: #fee2e2;
+            --warn-soft: #fff7e7;
+            --shadow: 0 18px 40px rgba(73, 48, 12, 0.10);
+        }
 
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--font-sans); }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top left, #fcedcf 0, transparent 28%),
+                radial-gradient(circle at top right, #ddf4ef 0, transparent 26%),
+                linear-gradient(180deg, #f5efe6, #f7f3eb);
+            color: var(--text);
+            padding: 24px;
+        }
 
-.header { padding: 1.5rem 0 1rem; }
-.header h2 { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
-.header p { font-size: 14px; color: var(--color-text-secondary); margin-top: 4px; }
+        .wrap { max-width: 960px; margin: 0 auto; }
+        .hero, .panel, .summary {
+            background: rgba(255, 253, 248, 0.95);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+        }
 
-.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; }
-.tab {
-  padding: 6px 14px;
-  border-radius: 99px;
-  border: 0.5px solid var(--color-border-secondary);
-  background: transparent;
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.tab:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
-.tab.active {
-  background: var(--color-background-primary);
-  border-color: var(--color-border-primary);
-  color: var(--color-text-primary);
-  font-weight: 500;
-}
+        .hero { padding: 24px; }
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .hero h1 { margin-top: 16px; font-size: 38px; line-height: 1.1; }
+        .hero p { margin-top: 12px; color: var(--soft); line-height: 1.7; max-width: 720px; }
+        .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
 
-.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.5rem; }
-.stat-card {
-  background: var(--color-background-secondary);
-  border-radius: var(--border-radius-md);
-  padding: 12px 14px;
-  text-align: center;
-}
-.stat-num { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
-.stat-label { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+        .btn, .link-btn {
+            appearance: none;
+            border: 1px solid var(--line);
+            background: #fff;
+            color: var(--text);
+            border-radius: 999px;
+            padding: 12px 16px;
+            font: inherit;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.18s ease, background 0.18s ease;
+        }
+        .btn:hover, .link-btn:hover { transform: translateY(-1px); }
+        .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
 
-.q-list { display: flex; flex-direction: column; gap: 10px; }
+        .layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 18px; margin-top: 18px; }
+        .panel { padding: 20px; align-self: start; position: sticky; top: 16px; }
+        .panel h2 { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--soft); }
+        .field { margin-top: 16px; }
+        .field label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 700; }
+        .field select { width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; font: inherit; background: #fff; }
+        .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .chip {
+            border: 1px solid var(--line);
+            background: #fff;
+            color: var(--soft);
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        .chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
 
-.q-card {
-  background: var(--color-background-primary);
-  border: 0.5px solid var(--color-border-tertiary);
-  border-radius: var(--border-radius-lg);
-  overflow: hidden;
-  transition: border-color 0.15s;
-}
-.q-card:hover { border-color: var(--color-border-secondary); }
+        .stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
+        .stat { padding: 14px; border-radius: 18px; background: var(--warn-soft); border: 1px solid var(--line); }
+        .stat strong { display: block; font-size: 24px; }
+        .stat span { display: block; margin-top: 6px; font-size: 11px; font-weight: 800; color: var(--soft); text-transform: uppercase; letter-spacing: 0.06em; }
 
-.q-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 14px 16px;
-  cursor: pointer;
-  user-select: none;
-}
+        .panel-actions { display: grid; gap: 10px; margin-top: 16px; }
+        .quiz { background: rgba(255, 253, 248, 0.95); border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--shadow); padding: 22px; }
+        .quiz-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .badge { display: inline-block; padding: 8px 12px; border-radius: 999px; background: var(--warn-soft); border: 1px solid var(--line); font-size: 13px; font-weight: 800; color: #9a3412; }
+        .progress-meta { display: flex; justify-content: space-between; gap: 12px; margin-top: 18px; font-size: 13px; font-weight: 800; color: var(--soft); }
+        .progress { margin-top: 10px; height: 10px; border-radius: 999px; background: #ede2d2; overflow: hidden; }
+        .progress span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--primary), #14b8a6); transition: width 0.2s ease; }
+        .question { margin-top: 22px; font-size: 28px; line-height: 1.35; font-weight: 800; }
+        .sub { margin-top: 10px; color: var(--soft); line-height: 1.7; }
+        .options { display: grid; gap: 12px; margin-top: 22px; }
+        .option {
+            width: 100%;
+            border: 1px solid var(--line);
+            background: #fff;
+            border-radius: 18px;
+            padding: 16px;
+            text-align: left;
+            cursor: pointer;
+        }
+        .option.selected { border-color: var(--primary); background: var(--primary-soft); }
+        .option.correct { border-color: var(--success); background: var(--success-soft); }
+        .option.wrong { border-color: var(--danger); background: var(--danger-soft); }
+        .option span { display: inline-flex; gap: 12px; align-items: flex-start; line-height: 1.6; font-weight: 700; }
+        .option b {
+            display: inline-flex;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            background: rgba(31, 41, 55, 0.06);
+            flex-shrink: 0;
+            font-size: 13px;
+        }
+        .feedback {
+            display: none;
+            margin-top: 18px;
+            padding: 16px;
+            border-radius: 18px;
+            border: 1px solid var(--line);
+            background: var(--warn-soft);
+        }
+        .feedback.show { display: block; }
+        .feedback.ok { background: var(--success-soft); border-color: rgba(22, 101, 52, 0.18); }
+        .feedback.bad { background: #fff1ec; border-color: rgba(185, 28, 28, 0.16); }
+        .feedback strong { display: block; margin-bottom: 8px; }
+        .feedback p { color: var(--soft); line-height: 1.7; }
+        .quiz-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
 
-.q-num {
-  min-width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 500;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
+        .summary { display: none; margin-top: 18px; padding: 22px; }
+        .summary.show { display: block; }
+        .summary h2 { font-size: 30px; line-height: 1.2; }
+        .summary p { margin-top: 12px; color: var(--soft); line-height: 1.7; }
+        .summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+        .summary-box { padding: 16px; border-radius: 18px; border: 1px solid var(--line); background: var(--warn-soft); }
+        .summary-box strong { display: block; font-size: 26px; }
+        .summary-box span { display: block; margin-top: 6px; font-size: 11px; font-weight: 800; color: var(--soft); text-transform: uppercase; }
+        .review { display: grid; gap: 10px; margin-top: 18px; }
+        .review-item { padding: 14px; border-radius: 16px; border: 1px solid var(--line); background: #fff; }
+        .review-item strong { display: block; line-height: 1.6; font-size: 14px; }
+        .review-item span { display: block; margin-top: 8px; color: var(--soft); font-size: 13px; line-height: 1.6; }
 
-.q-text { font-size: 14px; font-weight: 500; color: var(--color-text-primary); flex: 1; line-height: 1.55; }
-.q-arrow { font-size: 12px; color: var(--color-text-tertiary); flex-shrink: 0; margin-top: 3px; transition: transform 0.2s; }
-.q-card.open .q-arrow { transform: rotate(180deg); }
+        @media (max-width: 900px) {
+            body { padding: 16px; }
+            .layout { grid-template-columns: 1fr; }
+            .panel { position: static; }
+        }
+        @media (max-width: 640px) {
+            .hero, .panel, .quiz, .summary { padding: 18px; border-radius: 20px; }
+            .hero h1 { font-size: 30px; }
+            .question { font-size: 22px; }
+            .summary-grid { grid-template-columns: 1fr; }
+            .hero-actions, .quiz-actions { flex-direction: column; }
+            .btn, .link-btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <section class="hero">
+            <span class="hero-badge">Java Intern Mock Quiz</span>
+            <h1>Lam trac nghiem de luyen phan xa phong van.</h1>
+            <p>Trang nay dung cho viec on nhanh theo kieu chon dap an. Ban co the loc theo chu de, tron lai bo de va xem giai thich ngay sau khi tra loi.</p>
+            <div class="hero-actions">
+                <a class="link-btn" href="java_interview_final.html">Xem bo cau hoi day du</a>
+                <a class="link-btn" href="index.html">Ve trang chon che do</a>
+            </div>
+        </section>
 
-.q-body {
-  display: none;
-  padding: 0 16px 16px 56px;
-  border-top: 0.5px solid var(--color-border-tertiary);
-}
-.q-card.open .q-body { display: block; padding-top: 12px; }
+        <section class="layout">
+            <aside class="panel">
+                <h2>Cau hinh bo de</h2>
+                <div class="field">
+                    <label for="countSelect">So cau</label>
+                    <select id="countSelect">
+                        <option value="10">10 cau</option>
+                        <option value="15" selected>15 cau</option>
+                        <option value="20">20 cau</option>
+                        <option value="999">Tat ca trong chu de</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Chu de</label>
+                    <div class="chips" id="chips"></div>
+                </div>
+                <div class="stats">
+                    <div class="stat"><strong id="poolStat">0</strong><span>Pool</span></div>
+                    <div class="stat"><strong id="doneStat">0</strong><span>Da lam</span></div>
+                    <div class="stat"><strong id="correctStat">0</strong><span>Dung</span></div>
+                    <div class="stat"><strong id="accStat">0%</strong><span>Do chinh xac</span></div>
+                </div>
+                <div class="panel-actions">
+                    <button class="btn primary" id="startBtn" type="button">Bat dau de moi</button>
+                    <button class="btn" id="shuffleBtn" type="button">Tron lai</button>
+                </div>
+            </aside>
 
-.q-body p { font-size: 13px; color: var(--color-text-secondary); line-height: 1.7; }
-.q-body code {
-  background: var(--color-background-secondary);
-  border: 0.5px solid var(--color-border-tertiary);
-  border-radius: 4px;
-  padding: 2px 6px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--color-text-primary);
-}
-.q-body .hint {
-  margin-top: 10px;
-  padding: 10px 12px;
-  background: var(--color-background-secondary);
-  border-left: 2px solid var(--color-border-secondary);
-  border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
-}
-.q-body .hint p { font-size: 12px; }
+            <div>
+                <section class="quiz" id="quizCard">
+                    <div class="quiz-head">
+                        <span class="badge" id="catBadge">San sang lam quiz</span>
+                        <button class="btn" id="skipBtn" type="button">Bo qua</button>
+                    </div>
+                    <div class="progress-meta">
+                        <span id="progressText">0 / 0</span>
+                        <span id="scoreText">Diem: 0</span>
+                    </div>
+                    <div class="progress"><span id="progressBar"></span></div>
+                    <h2 class="question" id="questionText">Nhan "Bat dau de moi" de tao mot bo de random.</h2>
+                    <p class="sub" id="questionSub">Ban co the doi chu de truoc khi bat dau. Moi lan tao de se tron thu tu cau hoi.</p>
+                    <div class="options" id="options"></div>
+                    <div class="feedback" id="feedback">
+                        <strong id="feedbackTitle"></strong>
+                        <p id="feedbackBody"></p>
+                    </div>
+                    <div class="quiz-actions">
+                        <button class="btn primary" id="checkBtn" type="button">Kiem tra dap an</button>
+                        <button class="btn" id="nextBtn" type="button" disabled>Cau tiep theo</button>
+                    </div>
+                </section>
 
-.tag {
-  display: inline-block;
-  font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 99px;
-  margin-top: 8px;
-  font-weight: 400;
-}
+                <section class="summary" id="summaryCard">
+                    <h2>Ban da hoan thanh bo de.</h2>
+                    <p id="summaryText"></p>
+                    <div class="summary-grid">
+                        <div class="summary-box"><strong id="sumScore">0</strong><span>Diem</span></div>
+                        <div class="summary-box"><strong id="sumCorrect">0</strong><span>Cau dung</span></div>
+                        <div class="summary-box"><strong id="sumPercent">0%</strong><span>Ty le dung</span></div>
+                    </div>
+                    <div class="review" id="reviewList"></div>
+                    <div class="quiz-actions">
+                        <button class="btn primary" id="restartBtn" type="button">Lam bo de moi</button>
+                        <a class="link-btn" href="java_interview_final.html">Mo bo cau hoi goc</a>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </div>
 
-.diff-easy { background: #EAF3DE; color: #3B6D11; }
-.diff-medium { background: #FAEEDA; color: #854F0B; }
-.diff-hard { background: #FCEBEB; color: #A32D2D; }
+    <script>
+        const categories = [
+            { id: 'all', label: 'Tat ca' },
+            { id: 'oop', label: 'OOP' },
+            { id: 'java', label: 'Java Core' },
+            { id: 'sql', label: 'SQL & DB' },
+            { id: 'ds', label: 'DS & Algo' },
+            { id: 'sdlc', label: 'SDLC' },
+            { id: 'spring', label: 'Spring Boot' }
+        ];
 
-.cat-num-oop { background: #EEEDFE; color: #3C3489; }
-.cat-num-sql { background: #E6F1FB; color: #0C447C; }
-.cat-num-java { background: #EAF3DE; color: #27500A; }
-.cat-num-ds { background: #FAEEDA; color: #633806; }
-.cat-num-sdlc { background: #FAECE7; color: #712B13; }
-.cat-num-misc { background: #FBEAF0; color: #72243E; }
+        const questionBank = [
+            { cat: 'oop', q: '4 tinh chat co ban cua OOP la gi?', options: ['Dong goi, ke thua, da hinh, tru tuong', 'Dong goi, dong bo, ke thua, generic', 'Da hinh, stream, de quy, abstraction', 'Dong goi, interface, package, collection'], answer: 0, explain: '4 tinh chat cot loi cua OOP la encapsulation, inheritance, polymorphism va abstraction.' },
+            { cat: 'oop', q: 'Abstract class va interface khac nhau o diem nao?', options: ['Abstract class co the co state va constructor; interface uu tien hop dong hanh vi', 'Interface co constructor, abstract class thi khong', 'Interface chi implement duoc 1 lan', 'Abstract class ho tro da ke thua class'], answer: 0, explain: 'Abstract class phu hop khi can chia se state hoac logic mac dinh. Interface phu hop de dinh nghia hop dong.' },
+            { cat: 'oop', q: 'Overloading la gi?', options: ['Ghi de method cua class cha trong class con', 'Cung ten method nhung khac danh sach tham so', 'Method chi duoc goi boi super', 'Mot class implement nhieu interface'], answer: 1, explain: 'Overloading xay ra khi cung ten method nhung khac so luong hoac kieu tham so.' },
+            { cat: 'oop', q: 'Nguyen tac nao thuong duoc uu tien trong thiet ke hien dai?', options: ['Favor inheritance over composition', 'Favor composition over inheritance', 'Chi dung static method', 'Khong can abstraction'], answer: 1, explain: 'Composition thuong linh hoat hon va giam coupling hon so voi inheritance.' },
 
-.empty { text-align: center; padding: 3rem; color: var(--color-text-tertiary); font-size: 14px; }
+            { cat: 'java', q: 'JDK, JRE, JVM co quan he dung nao?', options: ['JVM bao gom JRE va JDK', 'JDK bao gom JRE, JRE bao gom JVM', 'JRE bao gom JDK', 'Ca 3 doc lap nhau'], answer: 1, explain: 'JDK la bo cong cu phat trien, bao gom JRE. JRE la moi truong chay, bao gom JVM.' },
+            { cat: 'java', q: 'Trong Java, == va equals() khac nhau nhu the nao?', options: ['Khong khac nhau', '== so sanh gia tri, equals so sanh dia chi', '== so sanh tham chieu, equals so sanh logic theo class dinh nghia', 'equals chi dung cho number'], answer: 2, explain: 'Voi object, == thuong so sanh tham chieu con equals() so sanh tinh bang nhau theo logic cua class.' },
+            { cat: 'java', q: 'Java truyen tham so theo co che nao?', options: ['Pass by reference', 'Pass by pointer', 'Pass by value', 'Tuy theo primitive hay object'], answer: 2, explain: 'Java chi co pass by value. Voi object, no truyen ban sao cua tham chieu.' },
+            { cat: 'java', q: 'Khi noi chuoi trong vong lap, lua chon nao thuong hop ly nhat?', options: ['StringBuffer', 'StringBuilder', 'String', 'char[] co dinh'], answer: 1, explain: 'StringBuilder mutable va nhanh trong bai toan don luong, rat hop cho viec noi chuoi lap lai.' },
+            { cat: 'java', q: 'Checked exception la gi?', options: ['Ngoai le phai bat hoac khai bao throws', 'Ngoai le luon tu dong rollback', 'Ngoai le khong can xu ly', 'Ngoai le chi xuat hien khi compile'], answer: 0, explain: 'Checked exception duoc compiler kiem tra, vi du IOException, SQLException.' },
+            { cat: 'java', q: 'HashMap dung gi de tim dung key trong bucket?', options: ['toString()', 'compareTo()', 'hashCode() roi equals()', 'clone()'], answer: 2, explain: 'HashMap dung hashCode de xac dinh bucket va equals de xac nhan dung key can tim.' },
+            { cat: 'java', q: 'Functional interface la interface nhu the nao?', options: ['Co nhieu static method', 'Chi co mot abstract method', 'Chi co default method', 'Khong the dung voi lambda'], answer: 1, explain: 'Functional interface co dung 1 abstract method va la nen tang cua lambda expression.' },
+            { cat: 'java', q: 'Stream API phu hop nhat khi nao?', options: ['Khi can pipeline xu ly du lieu ro rang voi filter/map/collect', 'Khi can luu du lieu lau dai', 'Khi can thay the HashMap', 'Khi can viet SQL trong Java'], answer: 0, explain: 'Stream API dung de xu ly tap du lieu theo kieu khai bao, khong phai cau truc luu tru.' },
 
-.search-wrap { position: relative; margin-bottom: 1rem; }
-.search-wrap input {
-  width: 100%;
-  padding: 9px 12px 9px 36px;
-  border-radius: var(--border-radius-md);
-  border: 0.5px solid var(--color-border-secondary);
-  background: var(--color-background-primary);
-  font-size: 14px;
-  color: var(--color-text-primary);
-}
-.search-icon {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 14px;
-  color: var(--color-text-tertiary);
-  pointer-events: none;
-}
-</style>
+            { cat: 'sql', q: 'INNER JOIN tra ve du lieu nao?', options: ['Tat ca dong cua bang trai', 'Tat ca dong cua bang phai', 'Chi cac dong khop o ca hai bang', 'Tat ca dong cua ca hai bang ke ca khong khop'], answer: 2, explain: 'INNER JOIN chi lay cac ban ghi co quan he khop giua hai bang.' },
+            { cat: 'sql', q: 'RIGHT JOIN co y nghia nao?', options: ['Lay tat ca dong bang trai', 'Lay tat ca dong bang phai va phan khop cua bang trai', 'Chi lay dong khong khop', 'Giong het HAVING'], answer: 1, explain: 'RIGHT JOIN doi xung voi LEFT JOIN. Nhieu team doi vi tri bang de viet thanh LEFT JOIN cho de doc.' },
+            { cat: 'sql', q: 'WHERE va HAVING khac nhau chu yeu o diem nao?', options: ['WHERE loc truoc GROUP BY, HAVING loc sau GROUP BY', 'HAVING luon nhanh hon WHERE', 'WHERE chi dung voi JOIN', 'HAVING khong dung voi aggregate'], answer: 0, explain: 'WHERE loc row truoc khi group, HAVING loc ket qua sau khi da group.' },
+            { cat: 'sql', q: 'Muc dich chinh cua index trong database la gi?', options: ['Lam bang nho hon', 'Tang toc truy van doc theo dieu kien hoac sap xep', 'Tu dong xoa du lieu trung', 'Bat transaction'], answer: 1, explain: 'Index tang toc SELECT nhung co trade-off la lam INSERT/UPDATE/DELETE cham hon.' },
+            { cat: 'sql', q: 'Atomicity trong ACID co nghia nao?', options: ['Moi transaction phai chay song song', 'Tat ca thao tac trong transaction cung thanh cong hoac cung rollback', 'Du lieu luon duoc sort', 'Moi query deu co index'], answer: 1, explain: 'Atomicity dam bao transaction khong o trang thai nua vung.' },
+            { cat: 'sql', q: 'UNION va UNION ALL khac nhau o diem nao?', options: ['UNION ALL khong ho tro nhieu bang', 'UNION giu ban ghi trung, UNION ALL loai bo trung', 'UNION loai bo trung, UNION ALL giu nguyen', 'Khong co khac biet'], answer: 2, explain: 'UNION ALL thuong nhanh hon vi khong can loai bo ban ghi trung lap.' },
 
-<div class="header">
-  <h2>Câu hỏi phỏng vấn Java Backend — Intern</h2>
-  <p>60 câu hỏi phân loại theo chủ đề · bấm để xem gợi ý trả lời</p>
-</div>
+            { cat: 'ds', q: 'Big-O notation dung de mo ta dieu gi?', options: ['Mau giao dien cua ung dung', 'Do phuc tap thoi gian hoac bo nho khi input tang', 'Kich thuoc file Java', 'So luong class trong project'], answer: 1, explain: 'Big-O mo ta toc do tang cua tai nguyen can dung theo kich thuoc dau vao.' },
+            { cat: 'ds', q: 'Dieu kien bat buoc de dung Binary Search la gi?', options: ['Du lieu da duoc sap xep', 'Du lieu phai la LinkedList', 'Chi ap dung cho String', 'Mang phai co kich thuoc chan'], answer: 0, explain: 'Binary Search chi co y nghia khi du lieu da duoc sap xep theo thu tu phu hop.' },
+            { cat: 'ds', q: 'Stack va Queue khac nhau o diem nao?', options: ['Stack FIFO, Queue LIFO', 'Stack LIFO, Queue FIFO', 'Ca hai deu LIFO', 'Ca hai deu FIFO'], answer: 1, explain: 'Stack vao sau ra truoc, Queue vao truoc ra truoc.' },
+            { cat: 'ds', q: 'BFS thuong dung cau truc du lieu nao?', options: ['Queue', 'Stack', 'TreeMap', 'HashSet'], answer: 0, explain: 'BFS di theo tung lop nen thuong dung queue.' },
+            { cat: 'ds', q: 'Khi nao thuong uu tien ArrayList hon LinkedList?', options: ['Khi can truy cap theo index nhieu', 'Khi can xoa o giua rat nhieu va da co node', 'Khi khong co du lieu nao', 'Khi can tranh cap phat bo nho'], answer: 0, explain: 'ArrayList phu hop hon trong da so bai toan backend vi truy cap ngau nhien tot va locality tot.' },
 
-<div class="stats">
-  <div class="stat-card"><div class="stat-num" id="s-total">60</div><div class="stat-label">Tổng câu hỏi</div></div>
-  <div class="stat-card"><div class="stat-num" id="s-cat">6</div><div class="stat-label">Chủ đề</div></div>
-  <div class="stat-card"><div class="stat-num" id="s-shown">60</div><div class="stat-label">Đang hiển thị</div></div>
-  <div class="stat-card"><div class="stat-num" id="s-open">0</div><div class="stat-label">Đã mở</div></div>
-</div>
+            { cat: 'sdlc', q: 'Waterfall phu hop nhat khi nao?', options: ['Yeu cau on dinh va it thay doi', 'Can phan hoi lien tuc moi ngay', 'Can release nhieu lan trong tuan', 'Du an chi co 1 dev'], answer: 0, explain: 'Waterfall manh khi requirement ro rang, it thay doi; yeu khi phai doi huong lien tuc.' },
+            { cat: 'sdlc', q: 'Scrum la gi so voi Agile?', options: ['Scrum la mot nguyen ly trong SQL', 'Scrum la mot framework pho bien de ap dung tu duy Agile', 'Scrum la ten khac cua Kanban', 'Agile la cong cu cua Scrum'], answer: 1, explain: 'Agile la tu duy linh hoat; Scrum la framework cu the voi sprint, role va ceremony.' },
+            { cat: 'sdlc', q: 'Kanban nhan manh dieu gi?', options: ['Gioi han WIP va toi uu flow cong viec', 'Chi code khong test', 'Chi lam viec theo thang', 'Khong can bang cong viec'], answer: 0, explain: 'Kanban tap trung vao flow lien tuc va quan ly Work In Progress.' },
+            { cat: 'sdlc', q: 'CI trong CI/CD thuong co y nghia nao?', options: ['Tu dong build va test khi code duoc merge', 'Chi deploy bang tay', 'Tu dong doi requirement', 'Tu dong tao database moi'], answer: 0, explain: 'Continuous Integration giup phat hien loi som thong qua build va test tu dong.' },
 
-<div class="search-wrap">
-  <span class="search-icon">🔍</span>
-  <input type="text" id="search" placeholder="Tìm câu hỏi...">
-</div>
+            { cat: 'spring', q: 'Spring Boot giup giam cong suc nhat o diem nao?', options: ['Tu dong viet SQL cho moi bai toan', 'Auto-configuration va starter dependencies', 'Thay the Java thanh Python', 'Khong can build tool'], answer: 1, explain: 'Spring Boot noi bat nho auto-configuration, starter va embedded server.' },
+            { cat: 'spring', q: 'IoC va DI co quan he nhu the nao?', options: ['Khong lien quan', 'DI la mot cach de trien khai IoC', 'IoC la mot annotation', 'DI chi dung trong database'], answer: 1, explain: 'IoC la y tuong dao chieu dieu khien; DI la co che cap dependency tu ben ngoai vao object.' },
+            { cat: 'spring', q: '@RestController thuong duoc dung khi nao?', options: ['Khi tra view template HTML', 'Khi xay REST API tra JSON', 'Khi viet entity JPA', 'Khi cau hinh profile'], answer: 1, explain: '@RestController phu hop cho backend API vi tra du lieu truc tiep trong response body.' },
+            { cat: 'spring', q: '@SpringBootApplication thuong bao gom thanh phan nao?', options: ['@Entity, @Table, @Id', '@Configuration, @EnableAutoConfiguration, @ComponentScan', '@RequestBody, @Valid, @Bean', '@Controller, @Service, @Repository'], answer: 1, explain: '@SpringBootApplication la annotation tong hop cho class boot chinh.' },
+            { cat: 'spring', q: 'Kieu injection nao thuong duoc uu tien trong Spring?', options: ['Field injection', 'Constructor injection', 'Static injection', 'Manual new trong controller'], answer: 1, explain: 'Constructor injection ro rang dependency hon, de test hon va hop voi immutable field.' },
+            { cat: 'spring', q: '@Transactional thuong dung de lam gi?', options: ['Danh dau method chay trong transaction', 'Tao bean moi', 'Bat cache Redis', 'Dinh nghia route REST'], answer: 0, explain: '@Transactional giup gom nhieu thao tac data vao mot transaction logic.' }
+        ];
 
-<div class="tabs" id="tabs"></div>
-<div class="q-list" id="list"></div>
+        const els = {
+            chips: document.getElementById('chips'),
+            countSelect: document.getElementById('countSelect'),
+            poolStat: document.getElementById('poolStat'),
+            doneStat: document.getElementById('doneStat'),
+            correctStat: document.getElementById('correctStat'),
+            accStat: document.getElementById('accStat'),
+            startBtn: document.getElementById('startBtn'),
+            shuffleBtn: document.getElementById('shuffleBtn'),
+            skipBtn: document.getElementById('skipBtn'),
+            catBadge: document.getElementById('catBadge'),
+            progressText: document.getElementById('progressText'),
+            scoreText: document.getElementById('scoreText'),
+            progressBar: document.getElementById('progressBar'),
+            questionText: document.getElementById('questionText'),
+            questionSub: document.getElementById('questionSub'),
+            options: document.getElementById('options'),
+            feedback: document.getElementById('feedback'),
+            feedbackTitle: document.getElementById('feedbackTitle'),
+            feedbackBody: document.getElementById('feedbackBody'),
+            checkBtn: document.getElementById('checkBtn'),
+            nextBtn: document.getElementById('nextBtn'),
+            quizCard: document.getElementById('quizCard'),
+            summaryCard: document.getElementById('summaryCard'),
+            summaryText: document.getElementById('summaryText'),
+            sumScore: document.getElementById('sumScore'),
+            sumCorrect: document.getElementById('sumCorrect'),
+            sumPercent: document.getElementById('sumPercent'),
+            reviewList: document.getElementById('reviewList'),
+            restartBtn: document.getElementById('restartBtn')
+        };
 
-<script>
-const cats = [
-  { id: 'all', label: 'Tất cả' },
-  { id: 'oop', label: 'OOP' },
-  { id: 'java', label: 'Java cơ bản' },
-  { id: 'sql', label: 'SQL & DB' },
-  { id: 'ds', label: 'Cấu trúc DL & Giải thuật' },
-  { id: 'sdlc', label: 'Mô hình phát triển' },
-  { id: 'misc', label: 'Tổng hợp thực tế' },
-];
+        let activeCategory = 'all';
+        let quiz = [];
+        let current = 0;
+        let selected = null;
+        let locked = false;
+        let score = 0;
+        let logs = [];
 
-const questions = [
-  // OOP
-  { cat: 'oop', diff: 'easy', q: '4 đặc tính của lập trình hướng đối tượng là gì?', a: 'Gồm: Encapsulation (Đóng gói), Inheritance (Kế thừa), Polymorphism (Đa hình), Abstraction (Trừu tượng). Đây là nền tảng của OOP.', hint: 'Nhớ từ khoá: EIPA hoặc "Đóng Kế Đa Trừu"' },
-  { cat: 'oop', diff: 'easy', q: 'Đóng gói (Encapsulation) là gì? Cho ví dụ thực tế.', a: 'Đóng gói là che giấu dữ liệu bên trong class, chỉ cho phép truy cập qua method public. Ví dụ: field private String password trong class User, chỉ truy cập qua getPassword() / setPassword().', hint: 'Kết hợp với từ khóa private và getter/setter trong Java' },
-  { cat: 'oop', diff: 'easy', q: 'Kế thừa (Inheritance) là gì? Java hỗ trợ đa kế thừa không?', a: 'Kế thừa cho phép class con tái sử dụng code từ class cha bằng từ khóa extends. Java KHÔNG hỗ trợ đa kế thừa class (chỉ 1 class cha), nhưng hỗ trợ đa kế thừa interface.', hint: 'Java dùng interface để giải quyết hạn chế đa kế thừa' },
-  { cat: 'oop', diff: 'medium', q: 'Đa hình (Polymorphism) có mấy loại? Phân biệt compile-time và runtime polymorphism.', a: 'Có 2 loại: Compile-time (Method Overloading — cùng tên, khác tham số) và Runtime (Method Overriding — class con ghi đè method class cha). Runtime polymorphism được quyết định khi chạy chương trình qua dynamic dispatch.', hint: 'Overloading = same class, Overriding = parent-child class' },
-  { cat: 'oop', diff: 'medium', q: 'Trừu tượng (Abstraction) khác đóng gói như thế nào?', a: 'Đóng gói ẩn chi tiết triển khai bên trong object. Trừu tượng ẩn độ phức tạp, chỉ lộ ra những gì cần thiết (interface/abstract class). Đóng gói là HOW, Trừu tượng là WHAT.', hint: 'Abstract class & Interface là công cụ của Abstraction trong Java' },
-  { cat: 'oop', diff: 'medium', q: 'Phân biệt abstract class và interface trong Java.', a: 'Abstract class: có thể có method với body, field, constructor; class con dùng extends. Interface: chỉ có method abstract (trước Java 8), không có constructor; class implement dùng implements. Một class chỉ extends 1 abstract class nhưng implements nhiều interface.', hint: 'Từ Java 8, interface có thể có default method và static method' },
-  { cat: 'oop', diff: 'medium', q: 'Overriding và Overloading khác nhau thế nào?', a: 'Overloading: cùng tên method, khác số lượng hoặc kiểu tham số, trong cùng class (compile-time). Overriding: class con định nghĩa lại method của class cha, cùng signature, dùng @Override (runtime).', hint: 'Không thể override static method, chỉ có thể hide nó' },
-  { cat: 'oop', diff: 'hard', q: 'Giải thích SOLID principles. Bạn hiểu nguyên tắc nào nhất?', a: 'S: Single Responsibility — mỗi class 1 nhiệm vụ. O: Open/Closed — mở cho mở rộng, đóng cho sửa đổi. L: Liskov Substitution — class con thay thế được class cha. I: Interface Segregation — interface nhỏ thay vì 1 interface lớn. D: Dependency Inversion — phụ thuộc vào abstraction, không phụ thuộc implementation.', hint: 'Dùng ví dụ cụ thể từ project thực tế sẽ gây ấn tượng hơn' },
-  { cat: 'oop', diff: 'medium', q: 'this và super trong Java dùng để làm gì?', a: 'this: tham chiếu đến object hiện tại của class, dùng để gọi constructor khác của cùng class (this()), hoặc phân biệt field và tham số. super: tham chiếu đến class cha, dùng để gọi constructor cha (super()) hoặc method đã bị override.', hint: 'this() và super() phải là câu lệnh đầu tiên trong constructor' },
-  { cat: 'oop', diff: 'hard', q: 'Composition vs Inheritance — khi nào dùng cái nào?', a: 'Inheritance (IS-A): Dog IS-A Animal. Composition (HAS-A): Car HAS-A Engine. Ưu tiên Composition vì linh hoạt hơn, tránh tight coupling. Inheritance phù hợp khi class con thực sự là một dạng của class cha và muốn tái sử dụng hành vi chung.', hint: '"Favor composition over inheritance" — Design Patterns của Gang of Four' },
+        function shuffle(items) {
+            const arr = [...items];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
 
-  // Java cơ bản
-  { cat: 'java', diff: 'easy', q: 'JVM, JRE, JDK khác nhau như thế nào?', a: 'JDK (Java Development Kit): bộ phát triển đầy đủ gồm compiler, JRE, tools. JRE (Java Runtime Environment): môi trường chạy Java gồm JVM + libraries. JVM (Java Virtual Machine): máy ảo thực thi bytecode Java, giúp "write once, run anywhere".', hint: 'JDK ⊃ JRE ⊃ JVM' },
-  { cat: 'java', diff: 'easy', q: 'Sự khác biệt giữa == và .equals() trong Java?', a: '== so sánh tham chiếu bộ nhớ (reference equality). .equals() so sánh giá trị nội dung (value equality). Với String: "abc" == "abc" có thể true (String pool) nhưng new String("abc") == new String("abc") là false. Luôn dùng .equals() để so sánh String.', hint: 'String pool là lý do == đôi khi hoạt động với String literal' },
-  { cat: 'java', diff: 'easy', q: 'final, finally, finalize() trong Java là gì?', a: 'final: keyword không cho thay đổi (variable = hằng số, method = không override được, class = không kế thừa được). finally: block trong try-catch luôn chạy dù có exception hay không. finalize(): method của Object, được GC gọi trước khi thu gom (đã deprecated từ Java 9).', hint: '3 từ khác nhau hoàn toàn về chức năng' },
-  { cat: 'java', diff: 'easy', q: 'ArrayList và LinkedList khác nhau thế nào? Khi nào dùng cái nào?', a: 'ArrayList: backed bởi array, truy cập index O(1), thêm/xóa giữa O(n). LinkedList: linked nodes, truy cập O(n), thêm/xóa đầu/cuối O(1). Dùng ArrayList khi cần truy cập ngẫu nhiên nhiều, LinkedList khi thêm/xóa đầu/cuối nhiều.', hint: 'Trong thực tế, ArrayList được dùng phổ biến hơn vì cache-friendly' },
-  { cat: 'java', diff: 'medium', q: 'HashMap hoạt động như thế nào? Collision xử lý ra sao?', a: 'HashMap dùng hash function để tính index bucket từ key. Khi collision (2 key cùng bucket), Java dùng chaining (LinkedList tại bucket đó). Từ Java 8, khi bucket có >8 phần tử, LinkedList chuyển thành TreeNode (Red-Black Tree) để tối ưu lookup từ O(n) → O(log n).', hint: 'Nhớ load factor mặc định 0.75, resize khi vượt ngưỡng' },
-  { cat: 'java', diff: 'medium', q: 'Exception handling trong Java — checked vs unchecked exception?', a: 'Checked Exception: phải xử lý bằng try-catch hoặc throws, phát sinh lúc compile (IOException, SQLException). Unchecked Exception: RuntimeException và subclass, không bắt buộc xử lý (NullPointerException, ArrayIndexOutOfBoundsException).', hint: 'Error (OutOfMemoryError) không phải Exception — không nên catch' },
-  { cat: 'java', diff: 'medium', q: 'String, StringBuilder, StringBuffer khác nhau như thế nào?', a: 'String: immutable — mỗi thao tác tạo object mới. StringBuilder: mutable, không thread-safe, hiệu năng cao. StringBuffer: mutable, thread-safe (synchronized), chậm hơn StringBuilder. Trong vòng lặp, dùng StringBuilder thay String để tránh tạo nhiều object.', hint: 'Luôn dùng StringBuilder trong loop, StringBuffer khi multithreading' },
-  { cat: 'java', diff: 'medium', q: 'Giải thích Generics trong Java và lợi ích của nó.', a: 'Generics cho phép viết code với type tham số, kiểm tra kiểu tại compile time. Ví dụ: List<String> thay vì List thô. Lợi ích: type safety, loại bỏ casting, tái sử dụng code. Ký hiệu phổ biến: T (Type), E (Element), K (Key), V (Value).', hint: 'Type erasure: generic info bị xóa sau compile, chỉ tồn tại compile-time' },
-  { cat: 'java', diff: 'hard', q: 'Java Collections Framework — List, Set, Map quan hệ thế nào?', a: 'Collection interface có List (thứ tự, duplicate cho phép: ArrayList, LinkedList), Set (không duplicate: HashSet, TreeSet, LinkedHashSet). Map không extends Collection (HashMap, TreeMap, LinkedHashMap). Queue/Deque cũng là Collection. Iterator pattern để duyệt tất cả.', hint: 'Vẽ sơ đồ thừa kế khi trả lời sẽ rõ hơn' },
-  { cat: 'java', diff: 'hard', q: 'Functional interface và Lambda expression là gì?', a: 'Functional interface là interface có đúng 1 abstract method (dùng @FunctionalInterface). Lambda là cú pháp ngắn gọn để implement functional interface: (params) -> expression. Java 8 built-in: Runnable, Callable, Comparator, Predicate<T>, Function<T,R>, Consumer<T>, Supplier<T>.', hint: 'Stream API phụ thuộc nhiều vào Lambda và Functional Interface' },
-  { cat: 'java', diff: 'medium', q: 'Spring Boot là gì? Tại sao nó phổ biến trong Java backend?', a: 'Spring Boot là framework giúp tạo ứng dụng Spring standalone với cấu hình tối thiểu (convention over configuration). Auto-configuration, embedded server (Tomcat), starter dependencies giúp setup nhanh. Phổ biến vì giảm boilerplate, hệ sinh thái Spring rộng (Security, Data JPA, Web MVC).', hint: 'Hiểu @SpringBootApplication = @Configuration + @EnableAutoConfiguration + @ComponentScan' },
-  { cat: 'java', diff: 'medium', q: '@RestController khác @Controller như thế nào?', a: '@Controller dùng cho MVC truyền thống, return view name (template HTML). @RestController = @Controller + @ResponseBody, tự động serialize response thành JSON/XML — dùng cho REST API. Dùng @RestController khi build backend API cho frontend/mobile.', hint: 'ResponseBody annotation cho biết return value sẽ được ghi thẳng vào HTTP response body' },
-  { cat: 'java', diff: 'hard', q: 'Dependency Injection trong Spring — IoC Container hoạt động thế nào?', a: 'IoC (Inversion of Control): Spring tạo và quản lý bean, inject dependency thay vì code tự tạo. 3 cách inject: Constructor Injection (khuyến nghị), Setter Injection, Field Injection (@Autowired). Bean lifecycle: instantiate → populate properties → BeanPostProcessor → ready.', hint: 'Constructor injection ưu tiên vì immutable, dễ test hơn' },
+        function getPool() {
+            return activeCategory === 'all' ? [...questionBank] : questionBank.filter(q => q.cat === activeCategory);
+        }
 
-  // SQL & DB
-  { cat: 'sql', diff: 'easy', q: 'Phân biệt INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN.', a: 'INNER JOIN: chỉ lấy row khớp ở cả 2 bảng. LEFT JOIN: tất cả row bảng trái + row khớp bảng phải (NULL nếu không khớp). RIGHT JOIN: ngược lại LEFT JOIN. FULL OUTER JOIN: tất cả row của cả 2 bảng (NULL khi không khớp bên nào).', hint: 'LEFT JOIN phổ biến nhất trong thực tế. FULL OUTER JOIN không được hỗ trợ trực tiếp trong MySQL (dùng UNION)' },
-  { cat: 'sql', diff: 'easy', q: 'Primary Key và Foreign Key là gì?', a: 'Primary Key (PK): định danh duy nhất mỗi row trong bảng, không NULL, không trùng. Foreign Key (FK): cột tham chiếu đến PK của bảng khác, dùng để thiết lập quan hệ giữa các bảng và đảm bảo referential integrity.', hint: 'Một bảng chỉ có 1 PK nhưng có thể có nhiều FK' },
-  { cat: 'sql', diff: 'easy', q: 'WHERE và HAVING khác nhau như thế nào?', a: 'WHERE lọc row trước khi GROUP BY (không dùng được aggregate function). HAVING lọc nhóm sau khi GROUP BY (dùng được COUNT, SUM...). Ví dụ: WHERE age > 18 trước group, HAVING COUNT(*) > 5 sau khi group.', hint: 'Nhớ thứ tự: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY' },
-  { cat: 'sql', diff: 'medium', q: 'Index trong database là gì? Khi nào nên tạo index?', a: 'Index là cấu trúc dữ liệu (thường là B-Tree) giúp tăng tốc truy vấn, giảm số row phải scan. Nên tạo index trên: cột WHERE thường xuyên, cột JOIN, cột ORDER BY. Hạn chế: tốn bộ nhớ, làm chậm INSERT/UPDATE/DELETE vì phải cập nhật index.', hint: 'Không nên index bảng nhỏ hoặc cột có ít giá trị phân biệt (low cardinality)' },
-  { cat: 'sql', diff: 'medium', q: 'Transaction là gì? Giải thích ACID.', a: 'Transaction là tập thao tác DB được thực thi như 1 đơn vị. ACID: Atomicity (tất cả thành công hoặc rollback hết), Consistency (dữ liệu luôn hợp lệ), Isolation (transaction không ảnh hưởng nhau), Durability (commit xong thì lưu vĩnh viễn).', hint: 'Trong Spring: @Transactional annotation quản lý transaction tự động' },
-  { cat: 'sql', diff: 'medium', q: 'Viết query lấy top 3 nhân viên có lương cao nhất trong mỗi phòng ban.', a: 'Có thể dùng ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) để đánh số trong mỗi nhóm, rồi WHERE rank <= 3. Hoặc dùng subquery với NOT EXISTS. Approach Window Function thường được ưu tiên vì rõ ràng hơn.', hint: 'Window function (ROW_NUMBER, RANK, DENSE_RANK) rất hay gặp trong phỏng vấn' },
-  { cat: 'sql', diff: 'hard', q: 'SQL vs NoSQL — khi nào chọn loại nào?', a: 'SQL (relational): schema cố định, ACID, JOIN tốt, phù hợp dữ liệu có cấu trúc rõ ràng (MySQL, PostgreSQL). NoSQL: schema linh hoạt, scale ngang tốt hơn, phù hợp dữ liệu phi cấu trúc / khối lượng lớn (MongoDB - document, Redis - key-value, Cassandra - column). Chọn dựa trên tính chất dữ liệu và yêu cầu scale.', hint: 'Nhiều hệ thống dùng cả 2 (polyglot persistence)' },
-  { cat: 'sql', diff: 'easy', q: 'Phân biệt DELETE, TRUNCATE và DROP.', a: 'DELETE: xóa row theo điều kiện, có thể rollback, giữ structure. TRUNCATE: xóa tất cả row nhanh hơn DELETE, không rollback được (thường vậy), giữ structure. DROP: xóa hoàn toàn bảng kể cả structure và data.', hint: 'Truncate không kích hoạt DELETE trigger' },
+        function getCatLabel(id) {
+            return categories.find(cat => cat.id === id)?.label || id;
+        }
 
-  // Cấu trúc DL & Giải thuật
-  { cat: 'ds', diff: 'easy', q: 'Stack và Queue khác nhau thế nào? Cho ví dụ ứng dụng thực tế.', a: 'Stack: LIFO (Last In First Out) — ví dụ: call stack, undo/redo, duyệt cây DFS. Queue: FIFO (First In First Out) — ví dụ: hàng đợi in ấn, BFS, message queue (Kafka, RabbitMQ). Java: Stack class hoặc Deque cho Stack; LinkedList, ArrayDeque cho Queue.', hint: 'Deque (double-ended queue) có thể làm được cả Stack lẫn Queue' },
-  { cat: 'ds', diff: 'easy', q: 'Linked List là gì? So sánh với Array.', a: 'Linked List: chuỗi node liên kết nhau qua pointer. Array: bộ nhớ liên tục. Array nhanh hơn truy cập index O(1), Linked List nhanh hơn thêm/xóa đầu O(1). Array kích thước cố định (primitive array), ArrayList resize tự động. Linked List tốn thêm bộ nhớ cho pointer.', hint: 'Bài tập thường gặp: đảo ngược linked list, detect cycle (Floyd algorithm)' },
-  { cat: 'ds', diff: 'medium', q: 'Big O Notation là gì? Giải thích O(1), O(n), O(log n), O(n²).', a: 'Big O mô tả độ phức tạp thời gian/không gian khi input tăng. O(1): hằng số (truy cập HashMap). O(log n): logarithmic (Binary Search). O(n): tuyến tính (linear search). O(n log n): merge sort, quick sort. O(n²): vòng lặp lồng (bubble sort). Ưu tiên giải thuật có Big O nhỏ hơn.', hint: 'Phỏng vấn hay hỏi "độ phức tạp của giải thuật này là bao nhiêu?"' },
-  { cat: 'ds', diff: 'medium', q: 'Binary Search hoạt động như thế nào? Điều kiện để áp dụng?', a: 'Binary Search tìm kiếm bằng cách so sánh phần tử giữa mảng, loại bỏ nửa không cần thiết mỗi vòng → O(log n). Điều kiện: mảng PHẢI được sắp xếp. Implement: dùng left/right pointer, mid = left + (right-left)/2, so sánh target với arr[mid].', hint: 'Dùng left + (right-left)/2 thay vì (left+right)/2 để tránh overflow' },
-  { cat: 'ds', diff: 'medium', q: 'Phân biệt DFS và BFS. Khi nào dùng cái nào?', a: 'DFS (Depth First Search): đi sâu trước, dùng Stack/recursion. BFS (Breadth First Search): đi rộng trước, dùng Queue. Dùng BFS khi tìm đường đi ngắn nhất (shortest path) trong unweighted graph. Dùng DFS khi tìm tất cả path, cycle detection, topological sort.', hint: 'BFS đảm bảo tìm đường ngắn nhất, DFS không đảm bảo' },
-  { cat: 'ds', diff: 'easy', q: 'Sắp xếp nổi bọt (Bubble Sort) hoạt động thế nào? Độ phức tạp?', a: 'Bubble Sort so sánh từng cặp phần tử liền kề, đổi chỗ nếu sai thứ tự, lặp lại nhiều lần cho đến khi mảng được sắp. Phần tử lớn "nổi" dần lên cuối mảng. Độ phức tạp: O(n²) time, O(1) space. Không hiệu quả cho mảng lớn — trong thực tế dùng Arrays.sort() (Timsort, O(n log n)).', hint: 'Có thể tối ưu với flag "swapped" để dừng sớm nếu mảng đã sắp' },
-  { cat: 'ds', diff: 'hard', q: 'Recursion là gì? Tail recursion? Khi nào nên dùng iteration thay recursion?', a: 'Recursion: hàm gọi lại chính mình với bài toán nhỏ hơn, cần base case để dừng. Tail recursion: recursive call là thao tác cuối cùng (một số compiler tối ưu thành iteration). Dùng iteration khi: stack overflow risk (deep recursion), performance quan trọng. Recursion phù hợp: tree traversal, divide & conquer, code đơn giản hơn.', hint: 'Java không tự động tối ưu tail recursion như một số ngôn ngữ khác' },
-  { cat: 'ds', diff: 'medium', q: 'Hash Table / HashMap hoạt động thế nào? Giải thích hashing.', a: 'Hash function ánh xạ key thành index trong mảng. Collision khi 2 key có cùng hash. Xử lý: Chaining (LinkedList tại mỗi bucket) hoặc Open Addressing (tìm bucket trống tiếp theo). Load factor kiểm soát khi nào resize. Truy cập trung bình O(1), worst case O(n) khi nhiều collision.', hint: 'hashCode() và equals() phải nhất quán trong Java — nếu 2 object equals thì phải cùng hashCode' },
+        function updateStats() {
+            const pool = getPool();
+            const percent = logs.length ? Math.round((score / logs.length) * 100) : 0;
+            els.poolStat.textContent = pool.length;
+            els.doneStat.textContent = logs.length;
+            els.correctStat.textContent = score;
+            els.accStat.textContent = `${percent}%`;
+        }
 
-  // Mô hình phát triển
-  { cat: 'sdlc', diff: 'easy', q: 'Mô hình Waterfall là gì? Ưu và nhược điểm?', a: 'Waterfall: các phase tuần tự (Requirements → Design → Implementation → Testing → Deployment → Maintenance). Không quay lại phase trước. Ưu: đơn giản, có tài liệu đầy đủ, dễ quản lý với team nhỏ, project cố định requirement. Nhược: không linh hoạt, phát hiện lỗi muộn, khách hàng không thấy sản phẩm đến cuối.', hint: 'Phù hợp với project có yêu cầu rõ ràng, ít thay đổi' },
-  { cat: 'sdlc', diff: 'easy', q: 'Agile là gì? Phân biệt Agile và Scrum.', a: 'Agile là tập hợp nguyên tắc phát triển linh hoạt, lặp vòng (iterative), cộng tác với khách hàng liên tục. Scrum là một framework cụ thể triển khai Agile với Sprint (2-4 tuần), các roles (Product Owner, Scrum Master, Dev Team) và events (Sprint Planning, Daily Standup, Review, Retrospective). Agile là mindset, Scrum là cách làm.', hint: 'Kanban cũng là framework Agile phổ biến khác, dùng visual board' },
-  { cat: 'sdlc', diff: 'medium', q: 'Sprint trong Scrum là gì? Diễn ra những gì trong 1 sprint?', a: '1 Sprint (2-4 tuần): Sprint Planning (chọn task từ Product Backlog vào Sprint Backlog) → Daily Standup hàng ngày (3 câu hỏi: hôm qua làm gì, hôm nay làm gì, có blocker không) → Development → Sprint Review (demo cho stakeholder) → Sprint Retrospective (cải tiến quy trình).', hint: 'Sprint không bị extend — nếu task chưa xong thì chuyển sang sprint sau' },
-  { cat: 'sdlc', diff: 'medium', q: 'CI/CD là gì? Liên quan đến DevOps thế nào?', a: 'CI (Continuous Integration): tự động build và test code mỗi khi push lên repo (Jenkins, GitHub Actions). CD (Continuous Delivery/Deployment): tự động deploy lên staging/production sau khi CI pass. DevOps là văn hóa kết hợp Dev và Ops, CI/CD là một trong những practices cốt lõi của DevOps.', hint: 'Intern có thể chưa làm CI/CD nhưng cần biết khái niệm và lợi ích' },
-  { cat: 'sdlc', diff: 'easy', q: 'Git cơ bản — phân biệt git merge và git rebase.', a: 'git merge: gộp 2 branch bằng cách tạo commit merge mới, giữ nguyên history (có merge commit). git rebase: đặt lại base của branch, lịch sử tuyến tính hơn, không có merge commit. Merge an toàn hơn (không rewrite history), Rebase tạo history sạch hơn. Không rebase branch public đã shared.', hint: 'git pull --rebase vs git pull (merge) là điểm hay bị hỏi' },
-  { cat: 'sdlc', diff: 'medium', q: 'Unit test là gì? Viết unit test trong Java dùng gì?', a: 'Unit test kiểm thử từng method/class riêng lẻ, độc lập với external dependency. Trong Java: JUnit 5 (framework test), Mockito (mock dependency). Cấu trúc AAA: Arrange (setup), Act (gọi method), Assert (kiểm tra kết quả). Test coverage đo % code được test.', hint: 'Intern biết JUnit cơ bản và @Test, @BeforeEach, @AfterEach là đủ' },
+        function renderChips() {
+            els.chips.innerHTML = categories.map(cat => {
+                const count = cat.id === 'all' ? questionBank.length : questionBank.filter(q => q.cat === cat.id).length;
+                const active = cat.id === activeCategory ? 'active' : '';
+                return `<button type="button" class="chip ${active}" onclick="setCategory('${cat.id}')">${cat.label} (${count})</button>`;
+            }).join('');
+            updateStats();
+        }
 
-  // Tổng hợp thực tế
-  { cat: 'misc', diff: 'easy', q: 'REST API là gì? Các HTTP method thường dùng?', a: 'REST API là kiến trúc API dùng HTTP protocol. Các method: GET (lấy data), POST (tạo mới), PUT (cập nhật toàn bộ), PATCH (cập nhật một phần), DELETE (xóa). Status code: 200 OK, 201 Created, 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 500 Internal Server Error.', hint: 'PUT idempotent (gọi nhiều lần ra cùng kết quả), POST không idempotent' },
-  { cat: 'misc', diff: 'easy', q: 'Giải thích MVC pattern.', a: 'MVC (Model-View-Controller): Model (dữ liệu và business logic), View (giao diện người dùng), Controller (nhận request, gọi Model, trả View). Trong Spring Boot REST API: Model = Entity/DTO, Controller = @RestController xử lý request, View = JSON response. Giúp tách biệt concerns, dễ maintain.', hint: 'Trong Spring Boot thường thêm Service layer → MVCS' },
-  { cat: 'misc', diff: 'medium', q: 'JPA và Hibernate là gì? @Entity, @Table, @Column dùng thế nào?', a: 'JPA (Java Persistence API): specification chuẩn hóa ORM trong Java. Hibernate: implementation phổ biến nhất của JPA. @Entity: đánh dấu class ánh xạ với bảng DB. @Table(name="...") chỉ định tên bảng. @Column(name="...") chỉ định tên cột. @Id + @GeneratedValue cho primary key.', hint: 'Spring Data JPA = Spring wrapper cho JPA, giúp giảm boilerplate hơn nữa' },
-  { cat: 'misc', diff: 'medium', q: 'DTO (Data Transfer Object) là gì? Tại sao không nên expose Entity trực tiếp?', a: 'DTO là object dùng để transfer data giữa các layer, chỉ chứa field cần thiết. Không expose Entity vì: bảo mật (ẩn field nhạy cảm), tránh vòng lặp JSON (circular reference), decoupling layer, API contract độc lập với DB schema. Dùng ModelMapper hoặc MapStruct để convert Entity ↔ DTO.', hint: 'Request DTO cho input, Response DTO cho output — tốt hơn dùng chung 1 class' },
-  { cat: 'misc', diff: 'easy', q: 'Bạn sẽ debug một NullPointerException như thế nào?', a: 'Đọc stack trace để tìm dòng code gây lỗi. Kiểm tra xem object nào đang null tại dòng đó. Thêm null check hoặc Optional. Dùng breakpoint trong IDE để kiểm tra giá trị runtime. Phòng ngừa: dùng @NonNull, Optional<T>, hoặc Objects.requireNonNull() để fail-fast.', hint: 'Câu này test tư duy debug — nên nói về cả phòng ngừa lẫn xử lý' },
-  { cat: 'misc', diff: 'medium', q: 'Microservices vs Monolithic — khác nhau thế nào?', a: 'Monolithic: toàn bộ app trong 1 deployable unit, đơn giản hơn lúc đầu, scale toàn bộ cùng lúc. Microservices: chia thành nhiều service nhỏ độc lập, deploy riêng, scale riêng, giao tiếp qua API/message queue. Microservices phức tạp hơn (service discovery, distributed tracing) nhưng linh hoạt và scalable hơn.', hint: 'Intern thường làm monolithic — biết khái niệm microservices là đủ' },
-  { cat: 'misc', diff: 'easy', q: 'Bạn làm gì khi không hiểu một requirement?', a: 'Hỏi ngay người phụ trách (senior dev, tech lead, hoặc PO). Đặt câu hỏi rõ ràng: "Tôi hiểu yêu cầu là X, có đúng không?" Đừng tự đoán và code sai. Ghi lại câu trả lời vào tài liệu hoặc ticket. Proactive communication tốt hơn làm sai rồi sửa.', hint: 'Câu này test soft skill — đây là điểm cộng nếu trả lời tốt' },
-  { cat: 'misc', diff: 'medium', q: 'Caching là gì? Ứng dụng trong Java backend?', a: 'Cache lưu kết quả tính toán/query để trả về nhanh hơn lần sau mà không cần tính lại. Trong Java: @Cacheable (Spring Cache), Redis (distributed cache). Chiến lược: Cache-Aside, Write-Through, Write-Behind. Cần xem xét cache invalidation — "one of the hardest problems in CS".', hint: 'Redis rất phổ biến cho caching trong Java backend' },
-  { cat: 'misc', diff: 'hard', q: 'Làm thế nào để xử lý concurrency trong Java?', a: 'Java hỗ trợ: synchronized keyword (lock object), volatile (visibility giữa thread), java.util.concurrent (ExecutorService, ConcurrentHashMap, AtomicInteger). Vấn đề: race condition (nhiều thread cùng sửa data), deadlock (2 thread chờ nhau). Giải pháp hiện đại: dùng immutable object, avoid shared state, dùng concurrent collections.', hint: 'Intern không cần biết sâu về concurrency — chỉ cần biết vấn đề và các class cơ bản' },
-  { cat: 'misc', diff: 'easy', q: 'Kể về một project/bài tập bạn đã làm. Bạn học được gì?', a: 'Câu hỏi mở — chuẩn bị kể về project trong đồ án/thực tập/tự học. Cấu trúc STAR: Situation (context), Task (nhiệm vụ), Action (bạn làm gì), Result (kết quả + bài học). Highlight: công nghệ dùng, vấn đề gặp phải và cách giải quyết, điều muốn làm tốt hơn.', hint: 'Thành thật về giới hạn kiến thức nhưng cho thấy khả năng học hỏi' },
-];
+        function setCategory(id) {
+            activeCategory = id;
+            renderChips();
+            renderIdle('Nhan "Bat dau de moi" de tao bo de cho chu de nay.');
+        }
 
-let activeCat = 'all';
-let openCards = new Set();
-let search = '';
+        function renderIdle(message) {
+            quiz = [];
+            current = 0;
+            selected = null;
+            locked = false;
+            score = 0;
+            logs = [];
+            updateStats();
+            els.summaryCard.classList.remove('show');
+            els.quizCard.style.display = 'block';
+            els.catBadge.textContent = getCatLabel(activeCategory);
+            els.progressText.textContent = '0 / 0';
+            els.scoreText.textContent = 'Diem: 0';
+            els.progressBar.style.width = '0%';
+            els.questionText.textContent = 'San sang lam quiz.';
+            els.questionSub.textContent = message;
+            els.options.innerHTML = '<div class="feedback show"><strong>Chua co bo de.</strong><p>Chon chu de neu can, dat so cau roi bam "Bat dau de moi".</p></div>';
+            els.feedback.className = 'feedback';
+            els.checkBtn.disabled = true;
+            els.nextBtn.disabled = true;
+            els.skipBtn.disabled = true;
+        }
 
-function render() {
-  const filtered = questions.filter(q => {
-    const matchCat = activeCat === 'all' || q.cat === activeCat;
-    const matchSearch = !search || q.q.toLowerCase().includes(search) || q.a.toLowerCase().includes(search);
-    return matchCat && matchSearch;
-  });
+        function startQuiz() {
+            const pool = shuffle(getPool());
+            const requested = Number(els.countSelect.value);
+            const take = requested >= pool.length ? pool.length : requested;
+            quiz = pool.slice(0, take);
+            current = 0;
+            selected = null;
+            locked = false;
+            score = 0;
+            logs = [];
+            updateStats();
+            if (!quiz.length) {
+                renderIdle('Chu de nay hien chua co cau hoi.');
+                return;
+            }
+            els.summaryCard.classList.remove('show');
+            els.quizCard.style.display = 'block';
+            renderQuestion();
+        }
 
-  document.getElementById('s-shown').textContent = filtered.length;
-  document.getElementById('s-open').textContent = openCards.size;
+        function renderQuestion() {
+            const item = quiz[current];
+            selected = null;
+            locked = false;
+            els.feedback.className = 'feedback';
+            els.checkBtn.disabled = false;
+            els.nextBtn.disabled = true;
+            els.skipBtn.disabled = false;
+            els.catBadge.textContent = `${getCatLabel(item.cat)} · Cau ${current + 1}`;
+            els.progressText.textContent = `${current + 1} / ${quiz.length}`;
+            els.scoreText.textContent = `Diem: ${score}`;
+            els.progressBar.style.width = `${Math.round((current / quiz.length) * 100)}%`;
+            els.questionText.textContent = item.q;
+            els.questionSub.textContent = 'Chon dap an dung nhat roi bam "Kiem tra dap an".';
+            els.options.innerHTML = item.options.map((option, idx) => `
+                <button type="button" class="option" onclick="pickOption(${idx})">
+                    <span><b>${String.fromCharCode(65 + idx)}</b><i style="font-style:normal">${option}</i></span>
+                </button>
+            `).join('');
+        }
 
-  const list = document.getElementById('list');
-  if (filtered.length === 0) {
-    list.innerHTML = '<div class="empty">Không tìm thấy câu hỏi phù hợp</div>';
-    return;
-  }
+        function pickOption(index) {
+            if (locked) return;
+            selected = index;
+            [...els.options.children].forEach((node, idx) => node.classList.toggle('selected', idx === index));
+        }
 
-  list.innerHTML = filtered.map((q, i) => {
-    const idx = questions.indexOf(q);
-    const isOpen = openCards.has(idx);
-    const numClass = { oop: 'cat-num-oop', java: 'cat-num-java', sql: 'cat-num-sql', ds: 'cat-num-ds', sdlc: 'cat-num-sdlc', misc: 'cat-num-misc' }[q.cat];
-    const diffClass = { easy: 'diff-easy', medium: 'diff-medium', hard: 'diff-hard' }[q.diff];
-    const diffLabel = { easy: 'Cơ bản', medium: 'Trung bình', hard: 'Nâng cao' }[q.diff];
-    const catLabel = cats.find(c => c.id === q.cat)?.label || q.cat;
-    const num = (i + 1).toString().padStart(2, '0');
-    return `<div class="q-card${isOpen ? ' open' : ''}" data-idx="${idx}">
-      <div class="q-header" onclick="toggle(${idx})">
-        <div class="q-num ${numClass}">${num}</div>
-        <div class="q-text">${q.q}</div>
-        <div class="q-arrow">▼</div>
-      </div>
-      ${isOpen ? `<div class="q-body">
-        <p>${q.a}</p>
-        <div class="hint"><p>💡 <strong>Gợi ý:</strong> ${q.hint}</p></div>
-        <span class="tag ${diffClass}">${diffLabel}</span>
-        <span class="tag" style="background:var(--color-background-secondary);color:var(--color-text-secondary);margin-left:4px;">${catLabel}</span>
-      </div>` : ''}
-    </div>`;
-  }).join('');
-}
+        function checkAnswer() {
+            if (locked || selected === null || !quiz.length) return;
+            const item = quiz[current];
+            const ok = selected === item.answer;
+            locked = true;
+            logs.push({ q: item.q, correct: ok, explain: item.explain });
+            if (ok) score += 1;
+            [...els.options.children].forEach((node, idx) => {
+                node.classList.remove('selected');
+                if (idx === item.answer) node.classList.add('correct');
+                if (idx === selected && idx !== item.answer) node.classList.add('wrong');
+                node.disabled = true;
+            });
+            els.feedback.className = `feedback show ${ok ? 'ok' : 'bad'}`;
+            els.feedbackTitle.textContent = ok ? 'Dung roi.' : 'Chua dung.';
+            els.feedbackBody.textContent = `${item.explain} Dap an dung la ${String.fromCharCode(65 + item.answer)}.`;
+            els.checkBtn.disabled = true;
+            els.nextBtn.disabled = false;
+            els.skipBtn.disabled = true;
+            els.scoreText.textContent = `Diem: ${score}`;
+            updateStats();
+        }
 
-function toggle(idx) {
-  if (openCards.has(idx)) openCards.delete(idx);
-  else openCards.add(idx);
-  render();
-}
+        function nextQuestion() {
+            if (!quiz.length) return;
+            if (current === quiz.length - 1) {
+                showSummary();
+                return;
+            }
+            current += 1;
+            renderQuestion();
+        }
 
-function renderTabs() {
-  const tabsEl = document.getElementById('tabs');
-  tabsEl.innerHTML = cats.map(c => {
-    const count = c.id === 'all' ? questions.length : questions.filter(q => q.cat === c.id).length;
-    return `<button class="tab${activeCat === c.id ? ' active' : ''}" onclick="setTab('${c.id}')">${c.label} <span style="opacity:.5">${count}</span></button>`;
-  }).join('');
-}
+        function skipQuestion() {
+            if (locked || !quiz.length) return;
+            logs.push({ q: quiz[current].q, correct: false, explain: 'Ban da bo qua cau nay. Nen xem lai trong bo cau hoi goc.' });
+            updateStats();
+            nextQuestion();
+        }
 
-function setTab(id) {
-  activeCat = id;
-  openCards.clear();
-  renderTabs();
-  render();
-}
+        function showSummary() {
+            const total = quiz.length;
+            const percent = total ? Math.round((score / total) * 100) : 0;
+            const wrong = logs.filter(item => !item.correct).slice(0, 5);
+            els.quizCard.style.display = 'none';
+            els.summaryCard.classList.add('show');
+            els.sumScore.textContent = `${score}/${total}`;
+            els.sumCorrect.textContent = String(score);
+            els.sumPercent.textContent = `${percent}%`;
+            let message = 'Nen xem lai cac cau sai va lam them mot bo de nua.';
+            if (percent >= 85) message = 'Phan xa dang tot. Thu doi chu de hoac tang so cau de kho hon.';
+            else if (percent >= 65) message = 'Nen on them giai thich va tap tra loi thanh tieng.';
+            els.summaryText.textContent = `Ban dung ${score} tren ${total} cau. ${message}`;
+            els.reviewList.innerHTML = wrong.length
+                ? wrong.map(item => `<div class="review-item"><strong>${item.q}</strong><span>${item.explain}</span></div>`).join('')
+                : '<div class="review-item"><strong>Khong co cau sai trong bo de nay.</strong><span>Ban co the tron lai bo de hoac doi chu de de luyen tiep.</span></div>';
+        }
 
-document.getElementById('search').addEventListener('input', function() {
-  search = this.value.toLowerCase().trim();
-  render();
-});
+        els.startBtn.addEventListener('click', startQuiz);
+        els.shuffleBtn.addEventListener('click', startQuiz);
+        els.checkBtn.addEventListener('click', checkAnswer);
+        els.nextBtn.addEventListener('click', nextQuestion);
+        els.skipBtn.addEventListener('click', skipQuestion);
+        els.restartBtn.addEventListener('click', startQuiz);
 
-renderTabs();
-render();
-</script>
+        renderChips();
+        renderIdle('Ban co the chon chu de, so cau va bat dau ngay.');
+
+        window.setCategory = setCategory;
+        window.pickOption = pickOption;
+    </script>
+</body>
+</html>
